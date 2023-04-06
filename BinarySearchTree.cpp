@@ -11,6 +11,63 @@ template <typename T>
 BinarySearchTree<T>::~BinarySearchTree() { 
 
 }
+
+
+template <typename T>
+string BinarySearchTree<T>::Hash_Encoder(string input) {
+
+}
+
+template <typename T>
+string BinarySearchTree<T>::Hash_Decoder(string input) {
+
+}
+
+template <typename T>
+void BinarySearchTree<T>::Save_Encode_File(string file) {
+	fstream data;
+	data.open(file, ios::out); //| ios::app);
+
+	//UMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM THIS SHOULDN'T APPEND IT SHOULD OVERWRITE
+	//OTHERWISE it'll keep old accounts and make duplicates even after changes
+	//but do keep a backupfile
+
+	//GET FROM TREE
+
+	//WRITE AND ENCODE
+}
+template <typename T>
+void BinarySearchTree<T>::Load_Decode_File(string file) {
+	fstream data;
+	data.open(file, ios::in);
+	if (data.is_open()) {
+
+		//
+		// READ
+		while (!data.eof()) {
+			long CID;
+			string Username;
+			string Name;
+			string AccType;
+			string Org;
+			string Status;
+			string DOB;
+			string DOJ;
+			long SSN;
+			string Password;
+			data >> CID >> Username >> Name >> AccType >> Org >> Status >> DOB >> DOJ >> SSN >> Password;
+			Customer* person = new Customer(CID, Username, Name, AccType, Org, Status, DOB, DOJ, SSN, Password);
+			collection.addItem(person);
+		}
+
+		//DECODE
+		//Keep it simple  HASH ascii
+
+
+		//INSERT INTO TREE,  WATCH OUT FOR DUPLICATES
+	}
+	data.close();
+}
 template <typename T>
 void BinarySearchTree<T>::Insert(T* inval, Node<T>* parent) {
 	//inserting options:
@@ -47,6 +104,7 @@ void BinarySearchTree<T>::Insert(T* inval, Node<T>* parent) {
 	}
 
 	Height(root, nullptr);
+	size++;
 	//need to manage other parameters here like
 	// 
 	//height

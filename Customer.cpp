@@ -2,8 +2,10 @@
 #include <string>
 #include <vector>
 #include <algorithm>
+#include <istream>
+#include <iostream>
 //#include <bits/stdc++.h>
-
+using namespace std;
 //default constructor
 Customer::Customer() {
     CID = 0;
@@ -64,3 +66,74 @@ long Customer::balance() {
         
     return current_balance;
 }
+
+bool Customer::operator <(Customer& const other) {
+    if (CID < other.CID) {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
+
+bool Customer::operator >(Customer& const other) {
+    if (CID > other.CID) {
+        return true;
+    }
+    else {
+        return false;
+    }
+}
+
+
+bool Customer::operator ==(Customer& const other) {
+    if (CID == other.CID)
+        return true;
+    else
+        return false;
+}
+ostream& operator <<(ostream& out, const Customer& other) {
+    out << "CID: " << other.CID << "\nUserName: " << other.Username << "\nAccount Type: " << other.AccType << "\nOrganization: " << other.Org << "\nStatus: " << other.Status << "\nDOB: " << other.DOB << "\nDOJ: " << other.DOJ << "\nSSN: " << other.SSN << "\nCurrent Balance: " << other.current_balance << endl;
+    return out;
+}
+/*
+istream& operator >>(istream& in, const Customer& other) {
+    cout << "CID: ";
+    in >> other.CID;
+    >> "\nUserName: " >> other.Username >> "\nAccount Type: " >> other.AccType >> "\nOrganization: " >> other.Org >> "\nStatus: " >> other.Status >> "\nDOB: " >> other.DOB >> "\nDOJ: " >> other.DOJ >> "\nSSN: " >> other.SSN >> "\nCurrent Balance: " >> other.current_balance >> endl;
+    return in;
+}
+*/
+std::istream& operator>>(std::istream& in, Customer& other) {
+    std::cout << "CID: ";
+    in >> other.CID;
+
+    std::cout << "UserName: ";
+    in >> other.Username;
+
+    std::cout << "Account Type: ";
+    in >> other.AccType;
+
+    std::cout << "Organization: ";
+    in >> other.Org;
+
+    std::cout << "Status: ";
+    in >> other.Status;
+
+    std::cout << "DOB: ";
+    in >> other.DOB;
+
+    std::cout << "DOJ: ";
+    in >> other.DOJ;
+
+    std::cout << "SSN: ";
+    in >> other.SSN;
+
+    std::cout << "Current Balance: ";
+    in >> other.current_balance;
+
+    return in;
+}
+
+      

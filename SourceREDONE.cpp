@@ -4,7 +4,7 @@
 #include <vector>
 #include "Customer.h"
 //#include "Shelf.h"
-#include "EntertainmentCollection.h"
+//#include "EntertainmentCollection.h"
 //#include <fstream>
 #include <chrono>
 //#include <windows.h>
@@ -20,11 +20,8 @@ using namespace std;
 
 //TODO:
 //1)UPDATE INFORMATION STORAGE to be more in line with requirements
-//2)replace storage mechanism with linked list iteration OR IF UR FEELING SPICEY A BINARY TREE
-//add a way to search for a customer by name & ID
-// CAN JUST USE LINKED LIST and binary tree shell from past 2 labs
-//SUPER EASY CAUSE OF TEMPLATES!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-//3)add encryption
+//
+//3)add encryption to file reading and writing
 //4)make display, that not only displays all the customers, but also displays tables and charts of customer information
 //like a properly formated excel database
 //5) make customers informatoin saved and updated and loaded from separate fileio object
@@ -84,10 +81,9 @@ int usersnum = 0;
 
 string admin_user = "admin";
 string admin_pass = "password";
-//EntertainmentCollection<Customer> collection;
-//************************************************************************************************
+
 BinarySearchTree<Customer>* collection = new BinarySearchTree<Customer>();
-//
+
 vector<Customer*> nega;
 vector<Customer*> posi;
 
@@ -107,32 +103,35 @@ int main()
     fstream data;
     data.open("BankCustomers.txt", ios::in);
     if (data.is_open()) {
+
+            //MAKE FUNCTION HERE THAT READS AND DECODES HERE
+
         while (!data.eof()) {
-			long CID;
-			string Username;
-			string Name;
-			string AccType;
-			string Org;
-			string Status;
-			string DOB;
-			string DOJ;
-			long SSN;
-			string Password;
-			data >> CID >> Username >> Name >> AccType >> Org >> Status >> DOB >> DOJ >> SSN >> Password;
-			Customer* person = new Customer(CID, Username, Name, AccType, Org, Status, DOB, DOJ, SSN, Password);
-			collection.addItem(person);
-		}
-	}
+            long CID;
+            string Username;
+            string Name;
+            string AccType;
+            string Org;
+            string Status;
+            string DOB;
+            string DOJ;
+            long SSN;
+            string Password;
+            data >> CID >> Username >> Name >> AccType >> Org >> Status >> DOB >> DOJ >> SSN >> Password;
+            Customer* person = new Customer(CID, Username, Name, AccType, Org, Status, DOB, DOJ, SSN, Password);
+            collection.addItem(person);
+        }
+    }
     data.close();
     fstream data;
     data.open("BankCustomers.txt", ios::out|ios::app);
     */
 
     Customer* person1 = new Customer((long)4737, "jeff", "JeffEdwards", "B", "UniCinci", "pos", "12251997", "01012020", 3543543, "jeff");
-    Customer* person2 = new Customer((long)3646, "Ramona", "RamonaHucken", "B", "OSU", "neg", "7201999", "01012020", 757435, "morgan");
-    Customer* person3 = new Customer((long)4564, "Sam", "SamAltman", "P", "OpenAi", "pos", "5202000", "01012020", 456456, "michael");
+    Customer* person2 = new Customer((long)3646, "Ramona", "RamonaHucken", "B", "OSU", "neg", "7201999", "01012020", 757435, "ramona");
+    Customer* person3 = new Customer((long)4564, "Sam", "SamAltman", "P", "OpenAi", "pos", "5202000", "01012020", 456456, "sam");
     Customer* person4 = new Customer((long)4564, "Obama", "BarackObama", "B", "Whitehouse", "neg", "1201960", "01012020", 4533463, "obama");
-    Customer* person5 = new Customer((long)4547, "Abbian", "AbbianLaw", "P", "DeutscheBank", "pos", "8032002", "01012020", 3536363, "abby");
+    Customer* person5 = new Customer((long)4547, "Abbian", "AbbianLaw", "P", "DeutscheBank", "pos", "8032002", "01012020", 3536363, "abbian");
     person1->transaction(55);
     person1->transaction(100);
     person1->transaction(10000);
@@ -156,22 +155,20 @@ int main()
     collection->Insert(person3, collection->root);
     collection->Insert(person4, collection->root);
     collection->Insert(person5, collection->root);
-    //collection.addItem(person1);
-    //collection.addItem(person2);
-    //collection.addItem(person3);
-    //collection.addItem(person4);
-    //collection.addItem(person5);
-    //******************************************************************************************************************
-
-    //if (data.is_open()) {
-    //    for (int i = 0; i < collection.size(); i++) {
-	//		data << collection[i]->getCID() << " " << collection[i]->getUsername() << " " << collection[i]->getName() << " " << collection[i]->getAccType() << " " << collection[i]->getOrg() << " " << collection[i]->getStatus() << " " << collection[i]->getDOB() << " " << collection[i]->getDOJ() << " " << collection[i]->getSSN() << " " << collection[i]->getPassword() << endl;
-	//	}
-	//}
-    //spoof fake customers for bank database
     
 
-    //**************************************************************************************************************
+    //if (data.is_open()) {
+    // 
+    //          //  MAKE FUNCTION THAT ENCRYPTS HERE AND ALSO WRITES TO FILE
+    // 
+    //    for (int i = 0; i < collection.size(); i++) {
+    //		data << collection[i]->getCID() << " " << collection[i]->getUsername() << " " << collection[i]->getName() << " " << collection[i]->getAccType() << " " << collection[i]->getOrg() << " " << collection[i]->getStatus() << " " << collection[i]->getDOB() << " " << collection[i]->getDOJ() << " " << collection[i]->getSSN() << " " << collection[i]->getPassword() << endl;
+    //	}
+    //}
+    //spoof fake customers for bank database
+
+
+    //********************************************************************************************************
     search_collect(true);
     search_collect(false);
     /*int CID[];string Username[];string Name[]; string AccType[];string Org[];string Status[]; string DOB[];string DOJ[];long SSN[];string Password[];
@@ -180,13 +177,13 @@ int main()
     //variables to handle cycling of menus
     char first_page_option;
     char customer_or_admin;
-    bool admin_success=false;
-    bool customer_success=false;
+    bool admin_success = false;
+    bool customer_success = false;
     bool signup_success = false;
     char admin_choice;
     char customer_choice;
     bool logout = true;
-  
+
     while (logout) {
         do {
 
@@ -217,7 +214,7 @@ int main()
                 //perhaps leave an option to exit
 
                 customer_success = cust_sign();
-                
+
                 //while loop is unnecessary with recursion
             } while (!customer_success);
             customer_or_admin = 'c';
@@ -236,84 +233,84 @@ int main()
         if (!logout) {
             break;
         }
-        
+
         switch (customer_or_admin)
         {
         case 'a':
-                adyes = true;
-            do{
+            adyes = true;
             do {
-                admin_choice = admin_route();
-            } while (admin_choice != '1' && admin_choice != '2' && admin_choice != '3' && admin_choice != '4' && admin_choice != '5' && admin_choice != '6' && admin_choice != '7');
-
-            
-            switch (admin_choice) {
-            case '1':
-                PayMonthlyInterest();
-                break;
-            case '2':
-                Checkaccountwith_neg_vebalance();
-                break;
-            case '3':
-                Checkaccountwith_pos_vebalances();
-                break;
-            case '4':
-                Warningmessagesto_neg_vebalanceaccounts();
-                break;
-            case '5':
-                Repeated_neg_vebalance_Blockaccount();
-                break;
-            case '6':
-                GeneratesummaryReport();
-                break;
-                //TotalCustomers();
-                //Totalactivecustomers();
-                //TotalInactivecustomers();
-                //Total_pos_vebalances();
-                //Total_neg_vebalances();
-            case '7':
-                Admin_Logout();
-                adyes = false;
-                //logout = false;
-            }
-            //below should be put within a switch case within the above switch case
-        }while (adyes);
-        case 'c':
-        //cuyes = true;
-            //do {
-                
                 do {
-                    do {
+                    admin_choice = admin_route();
+                } while (admin_choice != '1' && admin_choice != '2' && admin_choice != '3' && admin_choice != '4' && admin_choice != '5' && admin_choice != '6' && admin_choice != '7');
+
+
+                switch (admin_choice) {
+                case '1':
+                    PayMonthlyInterest();
+                    break;
+                case '2':
+                    Checkaccountwith_neg_vebalance();
+                    break;
+                case '3':
+                    Checkaccountwith_pos_vebalances();
+                    break;
+                case '4':
+                    Warningmessagesto_neg_vebalanceaccounts();
+                    break;
+                case '5':
+                    Repeated_neg_vebalance_Blockaccount();
+                    break;
+                case '6':
+                    GeneratesummaryReport();
+                    break;
+                    //TotalCustomers();
+                    //Totalactivecustomers();
+                    //TotalInactivecustomers();
+                    //Total_pos_vebalances();
+                    //Total_neg_vebalances();
+                case '7':
+                    Admin_Logout();
+                    adyes = false;
+                    //logout = false;
+                }
+                //below should be put within a switch case within the above switch case
+            } while (adyes);
+        case 'c':
+            //cuyes = true;
+                //do {
+
+            do {
+                do {
                     customer_choice = customer_route();
                 } while (customer_choice != '1' && customer_choice != '2' && customer_choice != '3' && customer_choice != '4' && customer_choice != '5' && customer_choice != '6' && customer_choice != '7');
-                
-                    switch (customer_choice) {
-                    case '1':
-                        StatementsummarylastNtransactions(*aptr);
-                        break;
-                    case '2':
-                        CurrentBalance(*aptr);
-                        break;
-                    case '3':
-                        Withdraw(*aptr);
-                        break;
-                    case '4':
-                        Deposit(*aptr);
-                        break;
-                    case '5':
-                        TransfertootherCID(*aptr);
-                        break;
-                    case '6':
-                        CheckInbox(*aptr);
-                        break;
-                    case '7':
-                        Customer_Logout(*aptr);
-                        //cuyes = false;
-                        //this should return to welcome menu;
-                        //logout=false;
-                        break;
-                    }
-                } while (customer_choice != '7');
+
+                switch (customer_choice) {
+                case '1':
+                    StatementsummarylastNtransactions(*aptr);
+                    break;
+                case '2':
+                    CurrentBalance(*aptr);
+                    break;
+                case '3':
+                    Withdraw(*aptr);
+                    break;
+                case '4':
+                    Deposit(*aptr);
+                    break;
+                case '5':
+                    TransfertootherCID(*aptr);
+                    break;
+                case '6':
+                    CheckInbox(*aptr);
+                    break;
+                case '7':
+                    Customer_Logout(*aptr);
+                    //cuyes = false;
+                    //this should return to welcome menu;
+                    //logout=false;
+                    break;
+                }
+            } while (customer_choice != '7');
             //} while (cuyes);
             //below go above
         default:
@@ -442,8 +439,8 @@ bool customer_signup() {
         //add to a customer array like lab project, just add another customer
         //should be searchable somehow
         //this is where u would create a new customer object jsut like shelf class types
-    } while (Username.size()<=3&&Name.size()<=3&&DOB.size()<=3);
-    user_pass.push_back({Username,Password});
+    } while (Username.size() <= 3 && Name.size() <= 3 && DOB.size() <= 3);
+    user_pass.push_back({ Username,Password });
     usersnum++;
 
     long ID = 2345234;
@@ -452,7 +449,7 @@ bool customer_signup() {
     pausebefore();
     //********************************************************************************
                 //needs heavy modification to work with Customer.h, replace that with videoGame
-    
+
     // Add a video game to the collection
     //VideoGame* game = new VideoGame(title, year);
     // 
@@ -463,7 +460,7 @@ bool customer_signup() {
     collection->Insert(person, collection->root);
     //**********************************************************************************************
     // **********************************************************************************************
-    
+
     // Get the number of video games in the collection
     //int num_games = collection.getNumItems();
     // Remove a video game from the collection
@@ -495,7 +492,7 @@ bool cust_sign() {
     cin.ignore();
     Customer* temp;
     //cusmatch is a function to plug in creditentials and do a search and match
-    if(searchcollection(user)->Username==user&& searchcollection(user)->Password==pas) {
+    if (searchcollection(user)->Username == user && searchcollection(user)->Password == pas) {
         cout << "******PasswordMatch: Proceed**********" << endl << endl;
         aptr = searchcollection(user);
         pausebefore();
@@ -515,7 +512,7 @@ bool cusmatch(string usernam, string passwrd) {
     //function to search classes and see if username and password both exist and match
     //return true if both, return false if at least one is invalid
 
-    if (usersnum==0) {//sizeof(user_pass) == 0
+    if (usersnum == 0) {//sizeof(user_pass) == 0
 
         return false;
     }
@@ -528,8 +525,8 @@ bool cusmatch(string usernam, string passwrd) {
                 return true;
             }
         }
-            return false;
-        
+        return false;
+
     }
 }
 
@@ -580,17 +577,19 @@ char admin_route() {
 Customer* searchcollection(string namen) {
 
     Customer* aptr2;
+    Node<Customer>** temp = collection->GetAllAscending();
     bool incol = false;
     //collection
-    if (collection.getNumItems() == 0) {
+    if (collection->size == 0) {
         return nullptr;
-    }else{
-        for (int i = 0; i < collection.getNumItems(); i++) {
-            aptr2 = collection.getItem(i);  //need to add method that cycles through collection like an array
+    }
+    else {
+        for (int i = 0; i < collection->size; i++) {
+            aptr2 = temp[i]->key;
 
-             if(aptr2->Username== namen){
-          
-                return aptr2; 
+            if (aptr2->Username == namen) {
+
+                return aptr2;
             }
         }
         return nullptr;  //name not in collection
@@ -601,37 +600,31 @@ Customer* searchcollection(string namen) {
 //overloaded for admin functionality,  return a list of negative or positive balances
 //*********************************************************************************
 void search_collect(bool negpos) {
-    //THIS WHOLE FUNCTION NEEDS REDONE
-    //THIS WHOLE FUNCTION NEEDS REDONE
-    //THIS WHOLE FUNCTION NEEDS REDONE
-    //THIS WHOLE FUNCTION NEEDS REDONE
-    //THIS WHOLE FUNCTION NEEDS REDONE
-
-    Customer* aptr2;
+ 
+    Node<Customer>* aptr2;
     bool incol = false;
-    //collection
-    //if (collection.getNumItems() == 0) {
+    Node<Customer>** temp = collection->GetAllAscending();
+  
     if (collection->size == 0) {
         return;
     }
     else {
-        for (int i = 0; i < collection.getNumItems(); i++) {
-            aptr2 = collection.getItem(i);  //need to add method that cycles through collection like an array
-            //aptr2 = collection.Find(i);
+        for (int i = 0; i < collection->size; i++) {
+            aptr2 = temp[i];  
             if (negpos) {
-                if (aptr2->current_balance >= 0) {
-
-                    posi.push_back(aptr2);
+                if (aptr2->key->current_balance >= 0) {
+                    //puts customer into positive vector
+                    posi.push_back(aptr2->key);
                 }
             }
             else {
-                if (aptr2->current_balance <= 0) {
-
-                    nega.push_back(aptr2);
+                if (aptr2->key->current_balance <= 0) {
+                    //puts customer into negtive vector
+                    nega.push_back(aptr2->key);
                 }
             }
         }
-        return ;  //name not in collection
+        return;  //name not in collection
     }
 }
 
@@ -649,20 +642,20 @@ void PayMonthlyInterest() {
         tem_bal = posi[k]->current_balance * .07;
         cout << "Username: " << posi[k]->Username << " " << "Name: " << posi[k]->Name << " Balance: " << posi[k]->current_balance << " Interest is : " << tem_bal;
         posi[k]->current_balance += tem_bal;
-        cout<< " New balance is: " << posi[k]->current_balance <<endl;
+        cout << " New balance is: " << posi[k]->current_balance << endl;
     }
 
 }
 void Checkaccountwith_neg_vebalance() {
-//create a list of all accounts with negative balances
-    //include name, and balance in table
-   // Customer* searchcollection(bool neg)
+    //create a list of all accounts with negative balances
+        //include name, and balance in table
+       // Customer* searchcollection(bool neg)
 
     cout << "checking accounts with negative balances: \n";
     for (int k = 0; k < nega.size(); k++) {
-        cout<< "Username: "<<nega[k]->Username<< " "<< "Name: "<<nega[k]->Name<< " Balance: "<< nega[k]->current_balance<<endl;
+        cout << "Username: " << nega[k]->Username << " " << "Name: " << nega[k]->Name << " Balance: " << nega[k]->current_balance << endl;
     }
-    
+
 }
 void Checkaccountwith_pos_vebalances() {
     //create a list of all accounts with positive balances
@@ -675,24 +668,24 @@ void Checkaccountwith_pos_vebalances() {
     }
 }
 void Warningmessagesto_neg_vebalanceaccounts() {
-//leaves a message that customer can read in check inbox function
-    //Customer* searchcollection(bool neg)
+    //leaves a message that customer can read in check inbox function
+        //Customer* searchcollection(bool neg)
     cout << "Do you want to leave a warning message for negative balance accounts?" << endl;
     cout << "Type Y for yes" << endl;
     string warning;
-        cin >> warning;
+    cin >> warning;
     cin.ignore();
     if (warning == "Y") {
         for (int k = 0; k < nega.size(); k++) {
             nega[k]->Inbox.push_back("This is a warning, you have a negative balance");
         }
     }
-        //then function to add inbox;
+    //then function to add inbox;
 }
 void Repeated_neg_vebalance_Blockaccount() {
-//delete account maybe
-// 
-    //Customer* searchcollection(bool negpos)
+    //delete account maybe
+    // 
+        //Customer* searchcollection(bool negpos)
     cout << "Do you want to block accounts that have multiple warning messages?" << endl;
     cout << "Type Y for yes" << endl;
     string block;
@@ -704,16 +697,16 @@ void Repeated_neg_vebalance_Blockaccount() {
                 nega[k]->Inbox.push_back("Your account has been blocked");
                 nega[k]->current_balance = 0;
                 nega[k]->Password = "CANT NOT LOG IN NOW";
-                cout << nega[k]->Username<< " has been blocked" << endl;
+                cout << nega[k]->Username << " has been blocked" << endl;
             }
         }
     }
-        //function to disable pass or something;
+    //function to disable pass or something;
 }
 void GeneratesummaryReport() {
-//
-    cout << endl << "******Summary Report******: " << endl << collection.getNumItems() << endl;
-    cout << endl << "Total Customers are: " << endl << collection.getNumItems() << endl;
+    //
+    cout << endl << "******Summary Report******: " << endl << collection->size << endl;
+    cout << endl << "Total Customers are: " << endl << collection->size << endl;
     cout << "Accounts with positve balances: \n";
     for (int k = 0; k < posi.size(); k++) {
         cout << "Username: " << posi[k]->Username << " " << "Name: " << posi[k]->Name << " Balance: " << posi[k]->current_balance << endl;
@@ -724,13 +717,13 @@ void GeneratesummaryReport() {
     }
 }
 void TotalCustomers() {
-    cout << endl<< "Total Customers are: "<<endl << collection.getNumItems() << endl;
+    cout << endl << "Total Customers are: " << endl << collection->size << endl;
     //string a;
     //cin >> a;
     //cin.ignore();
 }
 void Totalactivecustomers() {
-    cout << endl << "Total Active Customers are: " << endl << collection.getNumItems() << endl;
+    cout << endl << "Total Active Customers are: " << endl << collection->size << endl;
 }
 void TotalInactivecustomers() {
     cout << endl << "Total Inactive Customers are: " << endl << "0" << endl;
@@ -758,7 +751,7 @@ void Admin_Logout() {
 //Customer page functions
 //******************************
 void StatementsummarylastNtransactions(Customer& persons) {
-//just display up to last 5 transactions
+    //just display up to last 5 transactions
     if (persons.account_status.size() == 0) {
         cout << " You have made no transactions as of yet" << endl;
     }
@@ -769,9 +762,9 @@ void StatementsummarylastNtransactions(Customer& persons) {
     }
     //************************** NEED A PAUSE FUNCTION OR STUFF WONT SHOW
 }
-void CurrentBalance(Customer & persons) {
-    
-    cout << "Your Current balance is: "<< persons.balance() <<endl;
+void CurrentBalance(Customer& persons) {
+
+    cout << "Your Current balance is: " << persons.balance() << endl;
     pausebefore();
 }
 void Withdraw(Customer& persons) {
@@ -782,32 +775,32 @@ void Withdraw(Customer& persons) {
     long amount;
     cout << "How much would you like to withdraw from the bank?" << endl;
     //do {
-        cin >> amount;
-        cin.ignore();
+    cin >> amount;
+    cin.ignore();
     //} while (!isdigit(amount));
-    persons.transaction(-1*amount);
+    persons.transaction(-1 * amount);
     pausebefore();
 }
 void Deposit(Customer& persons) {
-//increase balance
-    //also add to balance sheet
-    //message the ammount
+    //increase balance
+        //also add to balance sheet
+        //message the ammount
     long amount;
     cout << "How much would you like to deposit into the bank?" << endl;
     //do {
-        cin >> amount;
-        cin.ignore();
+    cin >> amount;
+    cin.ignore();
     //} while (!isdigit(amount));
     persons.transaction(amount);
     pausebefore();
 }
 void TransfertootherCID(Customer& persons) {}//**************************************
 void CheckInbox(Customer& persons) {
-        //warning for negative balance can be read here 
+    //warning for negative balance can be read here 
     cout << endl;
     cout << "Opening Inbox" << endl;
     cout << "Messages: " << endl;
-    if (sizeof(persons.Inbox) != 0){
+    if (sizeof(persons.Inbox) != 0) {
         for (int i = 0; i < sizeof(persons.Inbox); i++) {
             cout << persons.Inbox[i] << endl;  //size of should be vector dimensions
             //make sure there is a value and makesure use right size of function for vectors
@@ -827,7 +820,7 @@ void pausebefore() {
     //chrono::seconds dura( 5);
     //this_thread::sleep_forsleep_for(dura);
     //sleep(5);
-    
+
 }
 
 

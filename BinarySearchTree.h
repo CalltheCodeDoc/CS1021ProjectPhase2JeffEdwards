@@ -28,8 +28,14 @@ public:
 	void Print(Node<T>* toprint);
 	void PrintVect(Node<T>** vects);
 
-	
 
+
+	string Hash_Encoder(string input);
+	string Hash_Decoder(string input);
+
+	
+	void BinarySearchTree<T>::Save_Encode_File(string file);
+	void BinarySearchTree<T>::Load_Decode_File(string file);
 	
 	Node<T>* FindTransverseFamily(T* inval, Node<T>* grandparent, Node<T>* parent, Node<T>* child);
 	Node<T>* FindMinimum(Node<T>* start, Node<T>* target);

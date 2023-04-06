@@ -4,8 +4,8 @@
 #include <algorithm>
 #include <iomanip>
 #include <fstream>
-#include "Node.h"
-#include "Node.cpp"
+#include "NodeBST.h"
+#include "NodeBST.cpp"
 #include "BinarySearchTree.h"
 #include "BinarySearchTree.cpp"
 #include "Words.h"

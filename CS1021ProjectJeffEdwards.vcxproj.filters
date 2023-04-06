@@ -18,37 +18,22 @@
     <ClCompile Include="Customer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Source.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="EntertainmentCollection.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Shelf.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="BinarySearchTree.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="NodeBST.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="SourceBinaryTree.cpp">
+    <ClCompile Include="Words.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Words.cpp">
+    <ClCompile Include="SourceREDONE.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Customer.h">
       <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="EntertainmentCollection.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Shelf.h">
-      <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="BinarySearchTree.h">
       <Filter>Source Files</Filter>

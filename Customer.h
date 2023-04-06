@@ -3,24 +3,27 @@
 #define CUSTOMER_H
 #include <string>
 #include <vector>
+#include <ostream>
+#include <istream>
 
 using namespace std;
 
 class Customer {
 
 private:
-    long CID;
-    string AccType;
-    string Org;
-    string Status;
-    string DOB;
-    string DOJ;
-    long SSN;
+    
 
 
     
 
 	public:
+        long CID;
+        string AccType;
+        string Org;
+        string Status;
+        string DOB;
+        string DOJ;
+        long SSN;
         string Username; // so this is accessible
      string Name;
         string Password;  // so this is easilly accessible,  but probably should be private
@@ -39,6 +42,15 @@ private:
         // or positive entry
         //accessors
         long balance();  // returns current balance or a transaction from account_status vector
+
+
+
+        bool operator <(Customer& const other);
+        bool operator >(Customer& const other);
+        bool operator ==(Customer& const other);
+        friend ostream& operator<<(ostream& out, const Customer& other);
+        friend istream& operator>>(istream& in, const Customer& other);
+
 };
 
 #endif
