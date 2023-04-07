@@ -14,6 +14,7 @@
 #include "NodeBST.h"
 #include "NodeBST.cpp"
 #include "Admin.h"
+//#include <istream>
 
 
 
@@ -32,9 +33,17 @@ using namespace std;
 // 
 // 
 //3)add encryption to file reading and writing
-//4)make display, that not only displays all the customers, but also displays tables and charts of customer information
-//like a properly formated excel database
+//4)   Make displays update informatoin,  HINT have to create dataobjects that reference the information not copy it
+//
 //5) make customers informatoin saved and updated and loaded from separate fileio object
+// 
+// 
+// 
+//6) MEMORY MANAGEMENT,  HAVE TO DELETE STUFF LOLLLL  YOU JUST CREATE AND LEAVE IT IGNORE
+//
+//7)  Need to fix all this unnecessary spiderweb of search code.  fold in a lot of this overhead code back into
+//      the tree class,  and make it so that the tree class can be used to search for any data type
+//      AND ALSO customer admin classes.    theres less need for this danglign variables and helped functions
 
 //**************************************************************************
 //must do flow chart
@@ -63,12 +72,6 @@ void pausebefore();
 void search_collect(bool negpos);
 
 //admin page functions
-void PayMonthlyInterest();
-void Checkaccountwith_neg_vebalance();
-void Checkaccountwith_pos_vebalances();
-void Warningmessagesto_neg_vebalanceaccounts();
-void Repeated_neg_vebalance_Blockaccount();
-void GeneratesummaryReport();
 void TotalCustomers();
 void Totalactivecustomers();
 void TotalInactivecustomers();
@@ -103,12 +106,11 @@ bool cuyes;
 bool adyes;
 
 
-//should DOB and SSN BE STRUCT?
-//initialize some of these with transactions
+
 
 int main()
 {
-
+    system("color 0A");
     /*
     fstream data;
     data.open("BankCustomers.txt", ios::in);
@@ -420,55 +422,19 @@ char initial_welcome() {
 }
 
 
+
+
+
 bool customer_signup() {
 
-    long CID;
-    string Username, Name, AccType, Org, Status, DOB, DOJ, Password;
-    long SSN;
-    do {
-        system("cls");
-        cout << "Enter Customer Username: " << endl;
-        cin >> Username;
-        cin.ignore();
-        cout << "Enter Name: " << endl;
-        cin >> Name;
-        cin.ignore();
-        cout << "Enter Account Type(B/P): " << endl;
-        cin >> AccType;
-        cin.ignore();
-        cout << "Enter Organization: " << endl;
-        cin >> Org;
-        cin.ignore();
-        //cout << "Enter DOB: " << endl;
-        //cin >> string Status;                //<<set by bank
-        //cin.ignore();
-        cout << "Enter Date of Birth: " << endl;
-        cin >> DOB;
-        cin.ignore();
-        //cout << "Enter Date of Join: " << endl;
-        //cin >> string DOJ;                  //set to current date
-        //cin.ignore();
-        cout << "Enter Social Security Number: " << endl;
-        cin >> SSN;
-        cin.ignore();
-        cout << "Enter Password: " << endl;
-        cin >> Password;
-        cin.ignore();
-        //add to a customer array like lab project, just add another customer
-        //should be searchable somehow
-        //this is where u would create a new customer object jsut like shelf class types
-    } while (Username.size() <= 3 && Name.size() <= 3 && DOB.size() <= 3);
-    user_pass.push_back({ Username,Password });
-    usersnum++;
 
-    long ID = 2345234;
-    string status_temp = "temporary status";
-    string JOB = "temporary date of start";
-    pausebefore();
-   
-    Customer* person = new Customer(ID, Username, Name, AccType, Org, status_temp, DOB, JOB, SSN, Password);
+    Customer* person = new Customer();
+    std::cin>>*person;
     collection->Insert(person, collection->root);
-   
+    user_pass.push_back({ person->Username,person->Password });
+    usersnum++;
+    aptr = person;
+    
     if (true) {
         return true;
     }
@@ -476,6 +442,8 @@ bool customer_signup() {
         return false;
     }
 }
+
+
 
 bool cust_sign() {
 
@@ -557,11 +525,11 @@ char admin_route() {
     cout << "4 : Warningmessagesto - vebalanceaccounts." << endl;
     cout << "5 : Repeated - vebalance; Blockaccount." << endl;
     cout << "6: GeneratesummaryReport:" << endl;
-    cout << setw(20) << "TotalCustomers" << endl;
-    cout << setw(20) << "Totalactivecustomers" << endl;
-    cout << setw(20) << "TotalInactivecustomers" << endl;
-    cout << setw(20) << "Total + vebalances" << endl;
-    cout << setw(20) << "Total - vebalances" << endl;
+    cout << setw(30) << "TotalCustomers" << endl;
+    cout << setw(30) << "Totalactivecustomers" << endl;
+    cout << setw(30) << "TotalInactivecustomers" << endl;
+    cout << setw(30) << "Total + vebalances" << endl;
+    cout << setw(30) << "Total - vebalances" << endl;
     cout << "7: Logout" << endl;
     cin >> choice;
     cin.ignore();

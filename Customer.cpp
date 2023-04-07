@@ -2,7 +2,7 @@
 #include <string>
 #include <vector>
 #include <algorithm>
-#include <istream>
+//#include <istream>
 #include <iostream>
 //#include <bits/stdc++.h>
 using namespace std;
@@ -164,35 +164,111 @@ istream& operator >>(istream& in, const Customer& other) {
     return in;
 }
 */
-std::istream& operator>>(std::istream& in, Customer& other) {
+std::istream& operator>>(std::istream& is, Customer& other) {
+
     std::cout << "CID: ";
-    in >> other.CID;
+    is >> other.CID;
 
     std::cout << "UserName: ";
-    in >> other.Username;
+    is >> other.Username;
+
+    std::cout<< "Name: ";
+    is >> other.Name;
+
+    std::cout<< "Password: ";
+    is >> other.Password;
+
 
     std::cout << "Account Type: ";
-    in >> other.AccType;
+    is >> other.AccType;
 
     std::cout << "Organization: ";
-    in >> other.Org;
+    is >> other.Org;
 
     std::cout << "Status: ";
-    in >> other.Status;
+    is >> other.Status;
 
     std::cout << "DOB: ";
-    in >> other.DOB;
+    is >> other.DOB;
 
     std::cout << "DOJ: ";
-    in >> other.DOJ;
+    is >> other.DOJ;
 
     std::cout << "SSN: ";
-    in >> other.SSN;
+    is >> other.SSN;
 
     std::cout << "Current Balance: ";
-    in >> other.current_balance;
+    is >> other.current_balance;
 
-    return in;
+    return is;
 }
 
       
+
+
+//**************************************************
+//**************************************************
+//**************************************************
+//**************************************************
+//**************************************************
+//DEFUNCT CODE BELOW TO BE DELETED ONCE PROOVEN EVERYTHING WOKRS SUFFICIENTLY AFTER FULL REPLACEMENT
+
+//bool customer_signup() {
+//
+//    long CID;
+//    string Username, Name, AccType, Org, Status, DOB, DOJ, Password;
+//    long SSN;
+//    do {
+//        system("cls");
+//        cout << "Enter Customer Username: " << endl;
+//        cin >> Username;
+//        cin.ignore();
+//        cout << "Enter Name: " << endl;
+//        cin >> Name;
+//        cin.ignore();
+//        cout << "Enter Account Type(B/P): " << endl;
+//        cin >> AccType;
+//        cin.ignore();
+//        cout << "Enter Organization: " << endl;
+//        cin >> Org;
+//        cin.ignore();
+//        //cout << "Enter DOB: " << endl;
+//        //cin >> string Status;                //<<set by bank
+//        //cin.ignore();
+//        cout << "Enter Date of Birth: " << endl;
+//        cin >> DOB;
+//        cin.ignore();
+//        //cout << "Enter Date of Join: " << endl;
+//        //cin >> string DOJ;                  //set to current date
+//        //cin.ignore();
+//        cout << "Enter Social Security Number: " << endl;
+//        cin >> SSN;
+//        cin.ignore();
+//        cout << "Enter Password: " << endl;
+//        cin >> Password;
+//        cin.ignore();
+//        //should be searchable somehow
+//    } while (Username.size() <= 3 && Name.size() <= 3 && DOB.size() <= 3);
+//    user_pass.push_back({ Username,Password });
+//    usersnum++;
+//
+//    long ID = 2345234;
+//    string status_temp = "temporary status";
+//    string JOB = "temporary date of start";
+//    pausebefore();
+//   
+//    Customer* person = new Customer(ID, Username, Name, AccType, Org, status_temp, DOB, JOB, SSN, Password);
+//    collection->Insert(person, collection->root);
+//   
+//
+//    //**************************************************************************************************
+//    //**************************************************************************************************
+//    //whats this,  this is incomplete code?!?!?!?!??!?!
+//    //fix it
+//    if (true) {
+//        return true;
+//    }
+//    else {
+//        return false;
+//    }
+//}

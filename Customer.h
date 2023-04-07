@@ -3,8 +3,8 @@
 #define CUSTOMER_H
 #include <string>
 #include <vector>
-#include <ostream>
-#include <istream>
+#include <iostream>
+//#include <istream>
 #include "TablePrinter.h"
 
 using namespace std;
@@ -87,7 +87,7 @@ private:
         bool operator >(Customer& const other);
         bool operator ==(Customer& const other);
         friend ostream& operator<<(ostream& out, const Customer& other);
-        friend istream& operator>>(istream& in, const Customer& other);
+        friend istream& operator>>(istream& in, Customer& other);
 
 };
 
