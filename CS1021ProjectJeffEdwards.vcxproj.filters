@@ -30,6 +30,12 @@
     <ClCompile Include="SourceREDONE.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Admin.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="TablePrinter.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Customer.h">
@@ -42,6 +48,12 @@
       <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="Words.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Admin.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="TablePrinter.h">
       <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>

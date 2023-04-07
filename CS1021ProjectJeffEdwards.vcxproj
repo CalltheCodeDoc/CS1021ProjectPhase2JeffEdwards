@@ -127,16 +127,20 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Admin.cpp" />
     <ClCompile Include="BinarySearchTree.cpp" />
     <ClCompile Include="Customer.cpp" />
     <ClCompile Include="NodeBST.cpp" />
     <ClCompile Include="SourceREDONE.cpp" />
+    <ClCompile Include="TablePrinter.cpp" />
     <ClCompile Include="Words.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Admin.h" />
     <ClInclude Include="BinarySearchTree.h" />
     <ClInclude Include="Customer.h" />
     <ClInclude Include="NodeBST.h" />
+    <ClInclude Include="TablePrinter.h" />
     <ClInclude Include="Words.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

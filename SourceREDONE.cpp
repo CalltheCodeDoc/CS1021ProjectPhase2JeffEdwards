@@ -13,6 +13,8 @@
 #include "BinarySearchTree.cpp"
 #include "NodeBST.h"
 #include "NodeBST.cpp"
+#include "Admin.h"
+
 
 
 using namespace std;
@@ -21,6 +23,14 @@ using namespace std;
 //TODO:
 //1)UPDATE INFORMATION STORAGE to be more in line with requirements
 //
+// 2) start receding a lot of code into background classes
+//          that includes:
+//                          cin overload, replace that call in this source file
+//                                  it should transform like 15 lines of code into 2
+//                          make default kwargs that take roots,  so user never has to input root, unless they wanna change it
+//                              i think as long as root is a tree member and the method that calls it is also, jsut use this->root
+// 
+// 
 //3)add encryption to file reading and writing
 //4)make display, that not only displays all the customers, but also displays tables and charts of customer information
 //like a properly formated excel database
@@ -78,7 +88,7 @@ void Customer_Logout(Customer& persons);
 vector<vector<string>> user_pass;   // each column represents a user, row 1 is username row2 is their password
 int usersnum = 0;
 
-
+Admin* admin = new Admin();
 string admin_user = "admin";
 string admin_pass = "password";
 
@@ -156,7 +166,6 @@ int main()
     collection->Insert(person4, collection->root);
     collection->Insert(person5, collection->root);
     
-
     //if (data.is_open()) {
     // 
     //          //  MAKE FUNCTION THAT ENCRYPTS HERE AND ALSO WRITES TO FILE
@@ -173,6 +182,11 @@ int main()
     search_collect(false);
     /*int CID[];string Username[];string Name[]; string AccType[];string Org[];string Status[]; string DOB[];string DOJ[];long SSN[];string Password[];
     */
+
+    //display WORKS!!!!  YAYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY
+    //posi[0]->DisplayCustomerInformation();
+    //posi[0]->DisplayTransactionsTable();
+    //posi[0]->DisplayMessagesTable();
 
     //variables to handle cycling of menus
     char first_page_option;
@@ -246,22 +260,22 @@ int main()
 
                 switch (admin_choice) {
                 case '1':
-                    PayMonthlyInterest();
+                    admin->payInterest(posi, 0.07);
                     break;
                 case '2':
-                    Checkaccountwith_neg_vebalance();
+                    admin->checkNegativeBalance(nega, 909);
                     break;
                 case '3':
-                    Checkaccountwith_pos_vebalances();
+                    admin->checkPositiveBalance(posi, 909);
                     break;
                 case '4':
-                    Warningmessagesto_neg_vebalanceaccounts();
+                    admin->Warningmessagesto_neg_vebalanceaccounts(nega);
                     break;
                 case '5':
-                    Repeated_neg_vebalance_Blockaccount();
+                    admin->blockNegativeAccount(nega, 909);
                     break;
                 case '6':
-                    GeneratesummaryReport();
+                    admin->generateSummaryReport(posi, nega, collection);
                     break;
                     //TotalCustomers();
                     //Totalactivecustomers();
@@ -276,8 +290,7 @@ int main()
                 //below should be put within a switch case within the above switch case
             } while (adyes);
         case 'c':
-            //cuyes = true;
-                //do {
+      
 
             do {
                 do {
@@ -305,14 +318,9 @@ int main()
                     break;
                 case '7':
                     Customer_Logout(*aptr);
-                    //cuyes = false;
-                    //this should return to welcome menu;
-                    //logout=false;
                     break;
                 }
             } while (customer_choice != '7');
-            //} while (cuyes);
-            //below go above
         default:
             cout << "uhoh" << endl;
         }
@@ -324,6 +332,16 @@ int main()
 
     return 0;
 }
+
+
+
+
+
+
+
+
+
+
 
 
 //********************************************************************
@@ -343,9 +361,8 @@ int main()
 
 
 
-
 bool admmatch(string usar, string passs) {
-    if (usar == admin_user && passs == admin_pass) {
+    if (usar == admin->GetUsername() && passs == admin->GetPassword()) {
         cout << endl << "Sign in Successful" << endl;
         return true;
     }
@@ -353,6 +370,7 @@ bool admmatch(string usar, string passs) {
         return false;
     }
 }
+
 
 bool admin_sign() {
 
@@ -447,29 +465,10 @@ bool customer_signup() {
     string status_temp = "temporary status";
     string JOB = "temporary date of start";
     pausebefore();
-    //********************************************************************************
-                //needs heavy modification to work with Customer.h, replace that with videoGame
-
-    // Add a video game to the collection
-    //VideoGame* game = new VideoGame(title, year);
-    // 
-    // 
-    //this should happen in new function!!!!!!!!!!!!!!!!!!!
+   
     Customer* person = new Customer(ID, Username, Name, AccType, Org, status_temp, DOB, JOB, SSN, Password);
-    //collection.addItem(person);
     collection->Insert(person, collection->root);
-    //**********************************************************************************************
-    // **********************************************************************************************
-
-    // Get the number of video games in the collection
-    //int num_games = collection.getNumItems();
-    // Remove a video game from the collection
-    //Customer* person = collection.removeItem();
-    //cout << "Removed video game: " << person->getTitle() << " (" << person->getYear() << ")\n";
-    //*********************************************************************************
-
-
-
+   
     if (true) {
         return true;
     }
@@ -558,11 +557,11 @@ char admin_route() {
     cout << "4 : Warningmessagesto - vebalanceaccounts." << endl;
     cout << "5 : Repeated - vebalance; Blockaccount." << endl;
     cout << "6: GeneratesummaryReport:" << endl;
-    cout << setw(20) << "– TotalCustomers–" << endl;
-    cout << setw(20) << "– Totalactivecustomers–" << endl;
-    cout << setw(20) << " – TotalInactivecustomers–" << endl;
-    cout << setw(20) << "– Total + vebalances–" << endl;
-    cout << setw(20) << "– Total - vebalances–" << endl;
+    cout << setw(20) << "TotalCustomers" << endl;
+    cout << setw(20) << "Totalactivecustomers" << endl;
+    cout << setw(20) << "TotalInactivecustomers" << endl;
+    cout << setw(20) << "Total + vebalances" << endl;
+    cout << setw(20) << "Total - vebalances" << endl;
     cout << "7: Logout" << endl;
     cin >> choice;
     cin.ignore();
@@ -628,94 +627,8 @@ void search_collect(bool negpos) {
     }
 }
 
-//**************************************************************
-//functions:
-//***************************************************************
-// 
-// ********************
-//admin page functions
-//*********************
-void PayMonthlyInterest() {
-    long tem_bal;
-    cout << "Crediting accounts with interest accumulate for the month:\n";
-    for (int k = 0; k < posi.size(); k++) {
-        tem_bal = posi[k]->current_balance * .07;
-        cout << "Username: " << posi[k]->Username << " " << "Name: " << posi[k]->Name << " Balance: " << posi[k]->current_balance << " Interest is : " << tem_bal;
-        posi[k]->current_balance += tem_bal;
-        cout << " New balance is: " << posi[k]->current_balance << endl;
-    }
 
-}
-void Checkaccountwith_neg_vebalance() {
-    //create a list of all accounts with negative balances
-        //include name, and balance in table
-       // Customer* searchcollection(bool neg)
 
-    cout << "checking accounts with negative balances: \n";
-    for (int k = 0; k < nega.size(); k++) {
-        cout << "Username: " << nega[k]->Username << " " << "Name: " << nega[k]->Name << " Balance: " << nega[k]->current_balance << endl;
-    }
-
-}
-void Checkaccountwith_pos_vebalances() {
-    //create a list of all accounts with positive balances
-    //include name, and balance in table
-    //should be able to look at their information
-    //Customer* searchcollection(bool pos)
-    cout << "checking accounts with positve balances: \n";
-    for (int k = 0; k < posi.size(); k++) {
-        cout << "Username: " << posi[k]->Username << " " << "Name: " << posi[k]->Name << " Balance: " << posi[k]->current_balance << endl;
-    }
-}
-void Warningmessagesto_neg_vebalanceaccounts() {
-    //leaves a message that customer can read in check inbox function
-        //Customer* searchcollection(bool neg)
-    cout << "Do you want to leave a warning message for negative balance accounts?" << endl;
-    cout << "Type Y for yes" << endl;
-    string warning;
-    cin >> warning;
-    cin.ignore();
-    if (warning == "Y") {
-        for (int k = 0; k < nega.size(); k++) {
-            nega[k]->Inbox.push_back("This is a warning, you have a negative balance");
-        }
-    }
-    //then function to add inbox;
-}
-void Repeated_neg_vebalance_Blockaccount() {
-    //delete account maybe
-    // 
-        //Customer* searchcollection(bool negpos)
-    cout << "Do you want to block accounts that have multiple warning messages?" << endl;
-    cout << "Type Y for yes" << endl;
-    string block;
-    cin >> block;
-    cin.ignore();
-    if (block == "Y") {
-        for (int k = 0; k < nega.size(); k++) {
-            if (nega[k]->Inbox.size() >= 1) {
-                nega[k]->Inbox.push_back("Your account has been blocked");
-                nega[k]->current_balance = 0;
-                nega[k]->Password = "CANT NOT LOG IN NOW";
-                cout << nega[k]->Username << " has been blocked" << endl;
-            }
-        }
-    }
-    //function to disable pass or something;
-}
-void GeneratesummaryReport() {
-    //
-    cout << endl << "******Summary Report******: " << endl << collection->size << endl;
-    cout << endl << "Total Customers are: " << endl << collection->size << endl;
-    cout << "Accounts with positve balances: \n";
-    for (int k = 0; k < posi.size(); k++) {
-        cout << "Username: " << posi[k]->Username << " " << "Name: " << posi[k]->Name << " Balance: " << posi[k]->current_balance << endl;
-    }
-    cout << "Accounts with negative balances: \n";
-    for (int k = 0; k < nega.size(); k++) {
-        cout << "Username: " << nega[k]->Username << " " << "Name: " << nega[k]->Name << " Balance: " << nega[k]->current_balance << endl;
-    }
-}
 void TotalCustomers() {
     cout << endl << "Total Customers are: " << endl << collection->size << endl;
     //string a;

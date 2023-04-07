@@ -4,6 +4,8 @@
 #include "NodeBST.h"
 #include <exception>
 #include "TreeExceptions.h"
+#include <string>
+#include "Customer.h"
 
 template <typename T>
 class BinarySearchTree
@@ -34,8 +36,8 @@ public:
 	string Hash_Decoder(string input);
 
 	
-	void BinarySearchTree<T>::Save_Encode_File(string file);
-	void BinarySearchTree<T>::Load_Decode_File(string file);
+	void Save_Encode_File(string file);
+	void Load_Decode_File(string file);
 	
 	Node<T>* FindTransverseFamily(T* inval, Node<T>* grandparent, Node<T>* parent, Node<T>* child);
 	Node<T>* FindMinimum(Node<T>* start, Node<T>* target);

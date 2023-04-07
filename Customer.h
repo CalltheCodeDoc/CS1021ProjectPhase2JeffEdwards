@@ -5,6 +5,7 @@
 #include <vector>
 #include <ostream>
 #include <istream>
+#include "TablePrinter.h"
 
 using namespace std;
 
@@ -17,32 +18,69 @@ private:
     
 
 	public:
+        //TODO convert to int CID MAYBE, add to private
         long CID;
+        //TODO convert to private
         string AccType;
+
+        //TODO convert to private
         string Org;
+
+        //TODO convert to private
         string Status;
+
+        //TODO convert to private
         string DOB;
+
+        //TODO convert to private
         string DOJ;
+        //TODO convert to int SSN MAYBE, add to private
         long SSN;
+        //TODO convert to private
         string Username; // so this is accessible
-     string Name;
+
+        //TODO convert to private
+        string Name;
+        //TODO convert to private
         string Password;  // so this is easilly accessible,  but probably should be private
 		//constructors
         // uh oh these tables can't just be
+        //TO DO CONVERT ACCOUNT_STATUS TO PRIVATe, make it a vector of floats, and rename to transactions
         vector<long> account_status;     // a table of transactions
+        //TO DO CONVERT TO PRIVATE and INT
         long current_balance;     //sum of all transactions
+
+
+        //TO DO IMPLEMENT:
+        string showInboxMessages(int n);
+
+
+        //TO DOCONVERT to private, rename to messages
         vector<string> Inbox;
 		Customer();
+        //TO DO MAKE SURE CONSTRUCTOR FORMAT INCLUDES ALL THESE ARGS:
+        //    customer(CID, SSN, Username, Name, Account Type, Organization, Status, DOB, DOJ, Password);
         Customer(long id, string user, string nam, string acc, string organ, string stat, string birth, string job, long social, string pass);
 		~Customer();
 
         //mutators
+        //TO DO OPTIONAL:  SPLIT TRANSACTION INTO WITHDRAWAL, DEPOSIT, TRANSFER, change to floats as well with outputs of floats
+        //    float withdrawal(float);
+        //float depositfloat;
+        //float transfer(float, int CID);
         void transaction(long credit_debit);    //addjusts account_status by adding a new negative
         void summate(long ite);
+
+        //TO DO implement this function below or change other function to more closely match this function:
+        string lastNTransactions(int N);
+
         // or positive entry
         //accessors
         long balance();  // returns current balance or a transaction from account_status vector
 
+        void DisplayCustomerInformation() const;
+        void DisplayTransactionsTable() const;
+        void DisplayMessagesTable() const;
 
 
         bool operator <(Customer& const other);
@@ -54,3 +92,4 @@ private:
 };
 
 #endif
+

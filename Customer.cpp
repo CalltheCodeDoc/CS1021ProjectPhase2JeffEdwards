@@ -37,10 +37,69 @@ Customer::Customer(long id, string user, string nam, string acc, string organ, s
     transaction(0);
 }
 
-/*
+
 Customer::~Customer() {
-    delete* this;
-}*/
+    //delete* this;
+}
+
+
+
+void Customer::DisplayCustomerInformation() const{
+    std::vector<std::string> headers = { "CID", "Username", "Name", "Acc. Type", "Org.","Status", "DOB", "DOJ", "SSN", "Password"};
+   
+    std::vector<std::vector<std::string>> data = {
+        {to_string(CID), Username, Name, AccType, Org, Status, DOB, DOJ, to_string(SSN), Password}
+        //{"Longer Value 1", "Longer Value 2", "Longer Value 3"},
+        //{"Short 1", "Short 2", "Short 3"},
+    };
+
+    TablePrinter table(headers, data);
+    table.displayTable();
+}
+void Customer::DisplayTransactionsTable()const{
+
+    std::vector<std::string> headers = { };
+    //does empty vector work as such here?
+    std::vector<std::vector<std::string>> data = {
+        {}
+        //{"Longer Value 1", "Longer Value 2", "Longer Value 3"},
+        //{"Short 1", "Short 2", "Short 3"},
+    };
+    if (account_status.size() > 0) {
+        for (int i = 0; i < account_status.size(); i++) {
+            headers.push_back("Transaction ");
+            data[0].push_back(to_string(account_status[i]));
+        }
+    }
+    else {
+        headers.push_back("No Transactions");
+        data.push_back({ "0" });
+    }
+
+    TablePrinter table(headers, data);
+    table.displayTable();
+}
+void Customer::DisplayMessagesTable()const{
+    std::vector<std::string> headers = { };
+    //does empty vector work as such here?
+    std::vector<std::vector<std::string>> data = {
+        {}
+        //{"Longer Value 1", "Longer Value 2", "Longer Value 3"},
+        //{"Short 1", "Short 2", "Short 3"},
+    };
+    if (Inbox.size() > 0) {
+        for (int i = 0; i < Inbox.size(); i++) {
+            headers.push_back("Transaction ");
+            data[0].push_back(Inbox[i]);
+        }
+    }
+    else {
+        headers.push_back("No Messages");
+        data[0].push_back({"Check again another time"});
+    }
+    TablePrinter table(headers, data);
+    table.displayTable();
+}
 
 void Customer::transaction(long credit_debit) {
     account_status.push_back(credit_debit);

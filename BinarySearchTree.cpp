@@ -55,9 +55,10 @@ void BinarySearchTree<T>::Load_Decode_File(string file) {
 			string DOJ;
 			long SSN;
 			string Password;
-			data >> CID >> Username >> Name >> AccType >> Org >> Status >> DOB >> DOJ >> SSN >> Password;
+			//data >> CID >> Username >> Name >> AccType >> Org >> Status >> DOB >> DOJ >> SSN >> Password;
 			Customer* person = new Customer(CID, Username, Name, AccType, Org, Status, DOB, DOJ, SSN, Password);
-			collection.addItem(person);
+			//collection.addItem(person);
+			this.addItem(person);
 		}
 
 		//DECODE
