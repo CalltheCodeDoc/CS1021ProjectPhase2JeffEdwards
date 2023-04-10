@@ -147,6 +147,59 @@ string Admin::GetPassword(){
 
 
 
+
+void Admin::TotalCustomers(BinarySearchTree<Customer>* collection) {
+    cout << endl << "Total Customers are: " << endl << collection->size << endl;
+}
+void Admin::TotalActiveCustomers(BinarySearchTree<Customer>* collection) {
+    //modify to remove blocked accounts
+    cout << endl << "Total Active Customers are: " << endl << collection->size << endl;
+}
+
+void Admin::Total_pos_vebalances(vector<Customer*> posi) {
+	
+    cout << endl << "Total Postive Balances are: " << endl << posi.size() << endl;
+}
+
+void Admin::Total_neg_vebalances(vector<Customer*> nega) {
+	
+	cout << endl << "Total Negative Balances are: " << endl << nega.size() << endl;
+}
+
+
+
+
+
+
+//Defunct code below
+//void TotalCustomers() {
+//    cout << endl << "Total Customers are: " << endl << collection->size << endl;
+//    //string a;
+//    //cin >> a;
+//    //cin.ignore();
+//}
+//void Totalactivecustomers() {
+//    cout << endl << "Total Active Customers are: " << endl << collection->size << endl;
+//}
+//void TotalInactivecustomers() {
+//    cout << endl << "Total Inactive Customers are: " << endl << "0" << endl;
+//}
+//void Total_pos_vebalances() {
+//    //create a list of all accounts with positive balances
+//    //include name, and balance in table
+//    // 
+//    cout << endl << "Total Postive Balances are: " << endl << posi.size() << endl;
+//    //Customer* searchcollection(bool pos);
+//}
+//void Total_neg_vebalances() {
+//    //create a list of all accounts with negative balances
+//        //include name, and balance in table
+//        // 
+//    cout << endl << "Total Negative Balances are: " << endl << nega.size() << endl;
+//    //Customer* searchcollection(bool neg);
+//}
+
+
 //************************************
 //below is junk code that will be deleted granted everything works well
 // 

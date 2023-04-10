@@ -26,7 +26,7 @@ public:
 	Node<T>** GetAllAscending();   //key is string,  count is data//  sort by string
 	Node<T>** GetAllDescending();
 	void EmptyTree();
-	int Size(int count, Node<T>* node);
+	int Size(Node<T>* node);
 	void Print(Node<T>* toprint);
 	void PrintVect(Node<T>** vects);
 
@@ -74,6 +74,7 @@ public:
 		string msg_;
 	};
 	*/
+		int shift = 55;
 
 	private:
 	

@@ -24,38 +24,29 @@ using namespace std;
 //TODO:
 //1)UPDATE INFORMATION STORAGE to be more in line with requirements
 //
-// 2) start receding a lot of code into background classes
-//          that includes:
-//                          cin overload, replace that call in this source file
-//                                  it should transform like 15 lines of code into 2
-//                          make default kwargs that take roots,  so user never has to input root, unless they wanna change it
-//                              i think as long as root is a tree member and the method that calls it is also, jsut use this->root
+// 2) DECODE still truncates 2 customers oddly..
 // 
 // 
-//3)add encryption to file reading and writing
 //4)   Make displays update informatoin,  HINT have to create dataobjects that reference the information not copy it
 //
-//5) make customers informatoin saved and updated and loaded from separate fileio object
-// 
-// 
-// 
-//6) MEMORY MANAGEMENT,  HAVE TO DELETE STUFF LOLLLL  YOU JUST CREATE AND LEAVE IT IGNORE
 //
-//7)  Need to fix all this unnecessary spiderweb of search code.  fold in a lot of this overhead code back into
-//      the tree class,  and make it so that the tree class can be used to search for any data type
-//      AND ALSO customer admin classes.    theres less need for this danglign variables and helped functions
+//8)  Transaction history on initial balance creation doesnt work and update
+// 
+// 
+// 10)   implement transferCID    && active customers
+// 
+// 
+// 11)  make transaction table a 2 vectors and actually store the type of transaction
+// 
+// 
+// 12) double check project requirements to make sure all requirements are met
+// 
+
 
 //**************************************************************************
 //must do flow chart
 //**************************************************************************
 
-//can I use function templates????
-
-struct ADate {
-    int  month;
-    int  day;
-    int  year;
-};
 
 //functions that display pages
 char initial_welcome();
@@ -72,20 +63,9 @@ void pausebefore();
 void search_collect(bool negpos);
 
 //admin page functions
-void TotalCustomers();
-void Totalactivecustomers();
-void TotalInactivecustomers();
-void Total_pos_vebalances();
-void Total_neg_vebalances();
 void Admin_Logout();
 
 //customer page functions
-void StatementsummarylastNtransactions(Customer& persons);
-void CurrentBalance(Customer& persons);
-void Withdraw(Customer& persons);
-void Deposit(Customer& persons);
-void TransfertootherCID(Customer& persons);
-void CheckInbox(Customer& persons);
 void Customer_Logout(Customer& persons);
 
 vector<vector<string>> user_pass;   // each column represents a user, row 1 is username row2 is their password
@@ -106,90 +86,60 @@ bool cuyes;
 bool adyes;
 
 
+bool preload = true;
+
 
 
 int main()
 {
     system("color 0A");
-    /*
-    fstream data;
-    data.open("BankCustomers.txt", ios::in);
-    if (data.is_open()) {
-
-            //MAKE FUNCTION HERE THAT READS AND DECODES HERE
-
-        while (!data.eof()) {
-            long CID;
-            string Username;
-            string Name;
-            string AccType;
-            string Org;
-            string Status;
-            string DOB;
-            string DOJ;
-            long SSN;
-            string Password;
-            data >> CID >> Username >> Name >> AccType >> Org >> Status >> DOB >> DOJ >> SSN >> Password;
-            Customer* person = new Customer(CID, Username, Name, AccType, Org, Status, DOB, DOJ, SSN, Password);
-            collection.addItem(person);
-        }
-    }
-    data.close();
-    fstream data;
-    data.open("BankCustomers.txt", ios::out|ios::app);
-    */
-
-    Customer* person1 = new Customer((long)4737, "jeff", "JeffEdwards", "B", "UniCinci", "pos", "12251997", "01012020", 3543543, "jeff");
-    Customer* person2 = new Customer((long)3646, "Ramona", "RamonaHucken", "B", "OSU", "neg", "7201999", "01012020", 757435, "ramona");
-    Customer* person3 = new Customer((long)4564, "Sam", "SamAltman", "P", "OpenAi", "pos", "5202000", "01012020", 456456, "sam");
-    Customer* person4 = new Customer((long)4564, "Obama", "BarackObama", "B", "Whitehouse", "neg", "1201960", "01012020", 4533463, "obama");
-    Customer* person5 = new Customer((long)4547, "Abbian", "AbbianLaw", "P", "DeutscheBank", "pos", "8032002", "01012020", 3536363, "abbian");
-    person1->transaction(55);
-    person1->transaction(100);
-    person1->transaction(10000);
-    person2->transaction(8008);
-    person3->transaction(1337);
-    person4->transaction(-5);
-    person4->transaction(-500);
-    person4->transaction(454);
-    person5->transaction(-10);
-    person4->transaction(999);
-    person5->transaction(-100);
-    person2->transaction(5000);
-    person1->balance();
-    person2->balance();
-    person3->balance();
-    person4->balance();
-    person5->balance();
-    //Insert(T * inval, Node<T>*parent);
-    collection->Insert(person1, collection->root);
-    collection->Insert(person2, collection->root);
-    collection->Insert(person3, collection->root);
-    collection->Insert(person4, collection->root);
-    collection->Insert(person5, collection->root);
     
-    //if (data.is_open()) {
-    // 
-    //          //  MAKE FUNCTION THAT ENCRYPTS HERE AND ALSO WRITES TO FILE
-    // 
-    //    for (int i = 0; i < collection.size(); i++) {
-    //		data << collection[i]->getCID() << " " << collection[i]->getUsername() << " " << collection[i]->getName() << " " << collection[i]->getAccType() << " " << collection[i]->getOrg() << " " << collection[i]->getStatus() << " " << collection[i]->getDOB() << " " << collection[i]->getDOJ() << " " << collection[i]->getSSN() << " " << collection[i]->getPassword() << endl;
-    //	}
-    //}
-    //spoof fake customers for bank database
+    if (preload) {
+        collection->Load_Decode_File("Customers.txt");
+    }
+    else {
+        //INITIALIZER
 
 
-    //********************************************************************************************************
+        //this is just to load dummie variables into the program
+        //once there is a file this isn't needed
+        //though it might be smart to figure out how to load transactions separately
+        Customer* person1 = new Customer((long)4737, "jeff", "JeffEdwards", "B", "UniCinci", "pos", "12251997", "01012020", 3543543, "jeff");
+        Customer* person2 = new Customer((long)3646, "Ramona", "RamonaHucken", "B", "OSU", "neg", "7201999", "01012020", 757435, "ramona");
+        Customer* person3 = new Customer((long)4564, "Sam", "SamAltman", "P", "OpenAi", "pos", "5202000", "01012020", 456456, "sam");
+        Customer* person4 = new Customer((long)4564, "Obama", "BarackObama", "B", "Whitehouse", "neg", "1201960", "01012020", 4533463, "obama");
+        Customer* person5 = new Customer((long)4547, "Abbian", "AbbianLaw", "P", "DeutscheBank", "pos", "8032002", "01012020", 3536363, "abbian");
+        person1->transaction(55);
+        person1->transaction(100);
+        person1->transaction(10000);
+        person2->transaction(8008);
+        person3->transaction(1337);
+        person4->transaction(-5);
+        person4->transaction(-500);
+        person4->transaction(454);
+        person5->transaction(-10);
+        person4->transaction(999);
+        person5->transaction(-100);
+        person2->transaction(5000);
+        person1->balance();
+        person2->balance();
+        person3->balance();
+        person4->balance();
+        person5->balance();
+        //Insert(T * inval, Node<T>*parent);
+        collection->Insert(person1, collection->root);
+        collection->Insert(person2, collection->root);
+        collection->Insert(person3, collection->root);
+        collection->Insert(person4, collection->root);
+        collection->Insert(person5, collection->root);
+    }
+    
+
+
+
+    //functions that load up two admin functions (positive and negative accounts)
     search_collect(true);
     search_collect(false);
-    /*int CID[];string Username[];string Name[]; string AccType[];string Org[];string Status[]; string DOB[];string DOJ[];long SSN[];string Password[];
-    */
-
-    //display WORKS!!!!  YAYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY
-    //posi[0]->DisplayCustomerInformation();
-    //posi[0]->DisplayTransactionsTable();
-    //posi[0]->DisplayMessagesTable();
-
     //variables to handle cycling of menus
     char first_page_option;
     char customer_or_admin;
@@ -257,7 +207,7 @@ int main()
             do {
                 do {
                     admin_choice = admin_route();
-                } while (admin_choice != '1' && admin_choice != '2' && admin_choice != '3' && admin_choice != '4' && admin_choice != '5' && admin_choice != '6' && admin_choice != '7');
+                } while (admin_choice != '1' && admin_choice != '2' && admin_choice != '3' && admin_choice != '4' && admin_choice != '5' && admin_choice != '6' && admin_choice != '7' && admin_choice != '8' && admin_choice != '9' && admin_choice != '10'&& admin_choice != '11');
 
 
                 switch (admin_choice) {
@@ -279,17 +229,26 @@ int main()
                 case '6':
                     admin->generateSummaryReport(posi, nega, collection);
                     break;
-                    //TotalCustomers();
-                    //Totalactivecustomers();
-                    //TotalInactivecustomers();
-                    //Total_pos_vebalances();
-                    //Total_neg_vebalances();
                 case '7':
                     Admin_Logout();
+                    collection->Save_Encode_File("Customers.txt");
                     adyes = false;
                     //logout = false;
+                    break;
+                case '8':
+                    admin->TotalCustomers(collection);
+                    break;
+                case '9':
+                    admin->TotalActiveCustomers(collection);
+                    break;
+                case '10':
+                    admin->Total_pos_vebalances(posi);
+                    break;
+                case '11':
+                    admin->Total_neg_vebalances(nega);
+                    break;
                 }
-                //below should be put within a switch case within the above switch case
+                
             } while (adyes);
         case 'c':
       
@@ -301,25 +260,26 @@ int main()
 
                 switch (customer_choice) {
                 case '1':
-                    StatementsummarylastNtransactions(*aptr);
+                    aptr->StatementsummarylastNtransactions();
                     break;
                 case '2':
-                    CurrentBalance(*aptr);
+                    aptr->CurrentBalance();
                     break;
                 case '3':
-                    Withdraw(*aptr);
+                    aptr->Withdraw();
                     break;
                 case '4':
-                    Deposit(*aptr);
+                    aptr->Deposit();
                     break;
                 case '5':
-                    TransfertootherCID(*aptr);
+                    aptr->TransfertootherCID();
                     break;
                 case '6':
-                    CheckInbox(*aptr);
+                    aptr->CheckInbox();
                     break;
                 case '7':
                     Customer_Logout(*aptr);
+                    collection->Save_Encode_File("Customers.txt");
                     break;
                 }
             } while (customer_choice != '7');
@@ -331,6 +291,22 @@ int main()
 
 
     }
+
+    //Memory management isn't quite taken care of here, But i dont want to break anything by prematurely deleting a node
+    // during a rebalancing act.
+    //stray arrays aren't handled here
+    //althought that doesn't matter too terribly much if the contents of the array are pointers to the collection items
+    // and collection items's contents are deleted here under the for loops
+    //just means theres some stray pointers that point to the abyss of nothingness or point in misleading directions
+    // I believe most if not all those stray pointers are also lost in limbo  of closed escaped functions
+    //but that's not a big deal
+    //maybe they automatically get closed???
+    delete collection->root;
+    delete collection;
+    for(auto x: nega)
+        delete x;
+    for(auto x: posi) 
+        delete x;
 
     return 0;
 }
@@ -412,7 +388,7 @@ char initial_welcome() {
     cout << "1. AdminSignIn:            Enter   1     " << endl;
     cout << "2. CustomerSignInpage:     Enter   2    " << endl;
     cout << "3. CustomerSignUppage:     Enter   3    " << endl;
-    cout << "4. ExitApplication:”       Enter   4    " << endl << endl;
+    cout << "4. ExitApplication:        Enter   4    " << endl << endl;
     cout << "Enter your option: " << endl;
     cin >> first;
     cin.ignore();
@@ -434,7 +410,9 @@ bool customer_signup() {
     user_pass.push_back({ person->Username,person->Password });
     usersnum++;
     aptr = person;
-    
+    //**********************************************************************************************
+    // THIS IS NOT YET FULLY IMPLEMENTED
+    //**********************************************************************************************
     if (true) {
         return true;
     }
@@ -444,36 +422,49 @@ bool customer_signup() {
 }
 
 
-
 bool cust_sign() {
-
     string user;
     string pas;
-    system("cls");
-    cout << "Customer Sign in Page:" << endl << endl;
-    cout << "Enter Customer Username: " << endl;
-    cin >> user;
-    cin.ignore();
-    cout << "Enter Password: " << endl << endl;
-    cin >> pas;
-    cin.ignore();
-    Customer* temp;
-    //cusmatch is a function to plug in creditentials and do a search and match
-    if (searchcollection(user)->Username == user && searchcollection(user)->Password == pas) {
-        cout << "******PasswordMatch: Proceed**********" << endl << endl;
-        aptr = searchcollection(user);
-        pausebefore();
-        //******************************************************************************************
-        return true;
-    }
-    else {
-        cout << "******Passwordmismatch: LoopBack*********" << endl << endl;
-        string dump;
-        cin >> dump;
-        pausebefore();
-        return cust_sign();
+
+    while (true) {
+        system("cls");
+        cout << "Customer Sign in Page:" << endl << endl;
+        cout << "Enter Customer Username: " << endl;
+        cin >> user;
+        cin.ignore();
+        cout << "Enter Password: " << endl << endl;
+        cin >> pas;
+        cin.ignore();
+
+        Customer* temp;
+
+        if (searchcollection(user) == nullptr) {
+            cout << "******Username not found: LoopBack*********" << endl << endl;
+            //pausebefore();
+            string dump;
+            cin >> dump;
+            cin.clear();
+            continue; // Continue with the next iteration of the loop
+        }
+
+        if (searchcollection(user)->Username == user && searchcollection(user)->Password == pas) {
+            cout << "******PasswordMatch: Proceed**********" << endl << endl;
+            aptr = searchcollection(user);
+            pausebefore();
+            //******************************************************************************************
+            return true;
+        }
+        else {
+            cout << "******Passwordmismatch: LoopBack*********" << endl << endl;
+            string dump;
+            cin >> dump;
+            pausebefore();
+            continue; // Continue with the next iteration of the loop
+        }
     }
 }
+
+
 
 bool cusmatch(string usernam, string passwrd) {
     //function to search classes and see if username and password both exist and match
@@ -521,15 +512,14 @@ char admin_route() {
     cout << "Adminfunctionality : " << endl;
     cout << "1 : PayMonthlyInterest." << endl;
     cout << "2 : Checkaccountwith - vebalance." << endl;
-    cout << "3. Checkaccountwith + vebalances." << endl;
+    cout << "3 : Checkaccountwith + vebalances." << endl;
     cout << "4 : Warningmessagesto - vebalanceaccounts." << endl;
     cout << "5 : Repeated - vebalance; Blockaccount." << endl;
     cout << "6: GeneratesummaryReport:" << endl;
-    cout << setw(30) << "TotalCustomers" << endl;
-    cout << setw(30) << "Totalactivecustomers" << endl;
-    cout << setw(30) << "TotalInactivecustomers" << endl;
-    cout << setw(30) << "Total + vebalances" << endl;
-    cout << setw(30) << "Total - vebalances" << endl;
+    cout << setw(30) << "8: TotalCustomers" << endl;
+    cout << setw(30) << "9: Totalactivecustomers" << endl;
+    cout << setw(30) << "10: Total + vebalances" << endl;
+    cout << setw(30) << "11: Total - vebalances" << endl;
     cout << "7: Logout" << endl;
     cin >> choice;
     cin.ignore();
@@ -544,14 +534,14 @@ char admin_route() {
 Customer* searchcollection(string namen) {
 
     Customer* aptr2;
-    Node<Customer>** temp = collection->GetAllAscending();
+    Node<Customer>** temp = collection->GetAllDescending();
     bool incol = false;
     //collection
     if (collection->size == 0) {
         return nullptr;
     }
     else {
-        for (int i = 0; i < collection->size; i++) {
+        for (int i = 0; i < collection->Size(collection->root); i++) {
             aptr2 = temp[i]->key;
 
             if (aptr2->Username == namen) {
@@ -597,103 +587,16 @@ void search_collect(bool negpos) {
 
 
 
-void TotalCustomers() {
-    cout << endl << "Total Customers are: " << endl << collection->size << endl;
-    //string a;
-    //cin >> a;
-    //cin.ignore();
-}
-void Totalactivecustomers() {
-    cout << endl << "Total Active Customers are: " << endl << collection->size << endl;
-}
-void TotalInactivecustomers() {
-    cout << endl << "Total Inactive Customers are: " << endl << "0" << endl;
-}
-void Total_pos_vebalances() {
-    //create a list of all accounts with positive balances
-    //include name, and balance in table
-    // 
-    cout << endl << "Total Postive Balances are: " << endl << posi.size() << endl;
-    //Customer* searchcollection(bool pos);
-}
-void Total_neg_vebalances() {
-    //create a list of all accounts with negative balances
-        //include name, and balance in table
-        // 
-    cout << endl << "Total Negative Balances are: " << endl << nega.size() << endl;
-    //Customer* searchcollection(bool neg);
-}
 void Admin_Logout() {
     cout << "Logging out" << endl;
     pausebefore();
 }
 
-//******************************            
-//Customer page functions
-//******************************
-void StatementsummarylastNtransactions(Customer& persons) {
-    //just display up to last 5 transactions
-    if (persons.account_status.size() == 0) {
-        cout << " You have made no transactions as of yet" << endl;
-    }
-    else {
-        for (int k = 0; k < persons.account_status.size(); k++) {
-            cout << "Transaction _______ PLACE HOLDER SHOULD PUT DATE: $" << persons.account_status[k] << endl;
-        }
-    }
-    //************************** NEED A PAUSE FUNCTION OR STUFF WONT SHOW
-}
-void CurrentBalance(Customer& persons) {
-
-    cout << "Your Current balance is: " << persons.balance() << endl;
-    pausebefore();
-}
-void Withdraw(Customer& persons) {
-    //decrease balance
-    //lower balance sheet
-    //message the ammount
-    //perhaps dont allow to go negative
-    long amount;
-    cout << "How much would you like to withdraw from the bank?" << endl;
-    //do {
-    cin >> amount;
-    cin.ignore();
-    //} while (!isdigit(amount));
-    persons.transaction(-1 * amount);
-    pausebefore();
-}
-void Deposit(Customer& persons) {
-    //increase balance
-        //also add to balance sheet
-        //message the ammount
-    long amount;
-    cout << "How much would you like to deposit into the bank?" << endl;
-    //do {
-    cin >> amount;
-    cin.ignore();
-    //} while (!isdigit(amount));
-    persons.transaction(amount);
-    pausebefore();
-}
-void TransfertootherCID(Customer& persons) {}//**************************************
-void CheckInbox(Customer& persons) {
-    //warning for negative balance can be read here 
-    cout << endl;
-    cout << "Opening Inbox" << endl;
-    cout << "Messages: " << endl;
-    if (sizeof(persons.Inbox) != 0) {
-        for (int i = 0; i < sizeof(persons.Inbox); i++) {
-            cout << persons.Inbox[i] << endl;  //size of should be vector dimensions
-            //make sure there is a value and makesure use right size of function for vectors
-        }
-    }
-    else {
-        cout << "There are no Messages" << endl;
-        pausebefore();
-    }
-}
 
 
+
+
+//no functionality as of now
 void pausebefore() {
     //string adump;
     //cin >> adump;     //done to get user a chance to read message before screen clears
@@ -710,3 +613,9 @@ void Customer_Logout(Customer& persons) {
     pausebefore();
     //aptr = nullptr;
 }
+
+
+
+
+
+

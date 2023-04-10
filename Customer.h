@@ -20,6 +20,12 @@ private:
 	public:
         //TODO convert to int CID MAYBE, add to private
         long CID;
+
+        void Save_Encode_File1(fstream& data);
+        string Hash_Encoder(string input);
+        string Hash_Decoder(string input);
+        Customer* Load_Decode_File1(fstream& data);
+        int shift;
         //TODO convert to private
         string AccType;
 
@@ -88,6 +94,15 @@ private:
         bool operator ==(Customer& const other);
         friend ostream& operator<<(ostream& out, const Customer& other);
         friend istream& operator>>(istream& in, Customer& other);
+
+
+
+        void TransfertootherCID();
+        void StatementsummarylastNtransactions();
+        void CurrentBalance();
+        void Withdraw();
+        void Deposit();
+        void CheckInbox();
 
 };
 

@@ -29,5 +29,11 @@ public:
 	string GetPassword();
 
 
+	void TotalCustomers(BinarySearchTree<Customer>* collection);
+	void TotalActiveCustomers(BinarySearchTree<Customer>* collection);
+	void Total_pos_vebalances(vector<Customer*> posi);
+	void Total_neg_vebalances(vector<Customer*> nega);
+
+
 };
 #endif

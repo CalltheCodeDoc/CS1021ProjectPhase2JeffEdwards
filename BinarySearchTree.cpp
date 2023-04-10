@@ -1,5 +1,8 @@
 #include "BinarySearchTree.h"
 #include <iostream>
+#include <typeinfo>
+#include <sstream>
+#include <type_traits>
 
 using namespace std;
 template <typename T>
@@ -15,60 +18,82 @@ BinarySearchTree<T>::~BinarySearchTree() {
 
 template <typename T>
 string BinarySearchTree<T>::Hash_Encoder(string input) {
-
+	//caeser encoding
+	string temp;
+	for (auto x : input) {
+		
+			temp.push_back((x+shift)%256);
+	}
+	return temp;
 }
 
 template <typename T>
 string BinarySearchTree<T>::Hash_Decoder(string input) {
+	//ceaser decoding
+	string temp;
+	for (auto x : input) {
 
+		temp.push_back((x + (255 - shift)) % 256);
+	}
+	return temp;
 }
 
-template <typename T>
-void BinarySearchTree<T>::Save_Encode_File(string file) {
+template<typename T>
+void BinarySearchTree<T>::Save_Encode_File(string file){
 	fstream data;
-	data.open(file, ios::out); //| ios::app);
+		data.open(file, ios::out); //| ios::app);
+	
+		if (!data) {
+			cout << "Unable to open file" << endl;
+		}
+		else {
+			Node<T>** temp1 = GetAllAscending();
+			Customer* temp;
+			for (int i = 0; i < Size(root); i++) {
+				//WRITE
+				//ENCODE;
+				temp = temp1[i]->key;
+				temp->Save_Encode_File1(data);
+			}
+		}
+		data.close();
 
-	//UMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM THIS SHOULDN'T APPEND IT SHOULD OVERWRITE
-	//OTHERWISE it'll keep old accounts and make duplicates even after changes
-	//but do keep a backupfile
-
-	//GET FROM TREE
-
-	//WRITE AND ENCODE
 }
-template <typename T>
+
+
+template<typename T>
 void BinarySearchTree<T>::Load_Decode_File(string file) {
 	fstream data;
-	data.open(file, ios::in);
-	if (data.is_open()) {
+	data.open(file, ios::in); //| ios::app);
 
-		//
-		// READ
-		while (!data.eof()) {
-			long CID;
-			string Username;
-			string Name;
-			string AccType;
-			string Org;
-			string Status;
-			string DOB;
-			string DOJ;
-			long SSN;
-			string Password;
-			//data >> CID >> Username >> Name >> AccType >> Org >> Status >> DOB >> DOJ >> SSN >> Password;
-			Customer* person = new Customer(CID, Username, Name, AccType, Org, Status, DOB, DOJ, SSN, Password);
-			//collection.addItem(person);
-			this.addItem(person);
+	if (!data) {
+		cout << "Unable to open file" << endl;
+	}
+	else {
+
+		Customer* temp;
+		Customer* temp1= new Customer();
+		
+		//for (int i = 0; i < Size(root); i++) {
+		while(data){
+			//WRITE
+			//ENCODE;
+
+			
+			//temp = temp1[i]->key;
+			temp =temp1->Load_Decode_File1(data);
+			if (temp == nullptr) {
+				continue;
+			}
+			else {
+				Insert(temp, root);
+			}
 		}
-
-		//DECODE
-		//Keep it simple  HASH ascii
-
-
-		//INSERT INTO TREE,  WATCH OUT FOR DUPLICATES
 	}
 	data.close();
+
 }
+
 template <typename T>
 void BinarySearchTree<T>::Insert(T* inval, Node<T>* parent) {
 	//inserting options:
@@ -115,295 +140,6 @@ void BinarySearchTree<T>::Insert(T* inval, Node<T>* parent) {
 	//
 	//NEED TO REBALANCE HERE TOOO
 }
-template <typename T>
-void BinarySearchTree<T>::Remove(T* inval) {
-
-
-	//*******************************************************************************************
-	//REMOVE FUNCTION
-	//DELETEING A NODE CAUSES A CHAIN REACTION of deleting all nodes below it,
-	//Even if its temp
-	//change left and right pointers to nullptrs  before manually deleting node in this function
-	//******************************************************************************************
-
-
-	//these functions Remove should rebalance if necessary
-		//this is inefficient
-	//Node<T>* tempgrandchild = FindTransverse(inval, root);
-	//bool children = false;
-	Node<T>* temp = FindTransverseFamily(inval, root, nullptr, nullptr);
-	bool exception = false;
-	if (temp == nullptr) {
-		return; //nothing to remove   SHould PRINT OUT A THROW EXCEPTION BUT KEEP PROGRAM RUNNING
-	}
-	else if (temp->isTarget) {
-		if (temp->left == nullptr && temp->right == nullptr) {
-			//target is root and is the only node in tree
-			temp->isTarget = false;
-			temp->Target = nullptr;
-			root = nullptr;
-			delete temp;    //********************** remove if u dont want to delete but want to fetch it
-			//no rebalancing necessary here
-		}
-		else {
-			//TODO
-			//what to do if root has children
-			//rebalance? or just remove and let rebalancing handle it? or just remove and dont rebalance?
-
-			if (temp->Target->left != nullptr&& temp->Target->right == nullptr) {
-				root = temp->Target->left;
-				//temp->Target->left = nullptr;
-				//below line is unnecessary
-				//temp->Target->left->right= temp->right //THIS ONLY WORKS IF target has no children
-					//TO DO
-					//could put conditionals where if temp->right and temp->Target->left->right are not null then do somethign differeent
-					//conditoinal would have to be above the above line
-					//but it conflicts with the above if condition
-			}
-			else if(temp->Target->right != nullptr && temp->Target->left == nullptr) {
-				root = temp->Target->right;
-				//temp->Target->right = nullptr;
-				//below line is unnecessary but it does help in some corner cases
-				//temp->Target->right->left = temp->left //THIS ONLY WORKS IF target has no children
-					//TO DO
-					//could put conditionals where if temp->left and temp->Target->right->left are not null then do somethign differeent
-					//conditional would have to be above the above line
-					//but it conflicts with the above else if condition
-			}
-			else if (temp->Target->right != nullptr && temp->Target->left != nullptr) {
-				//TO DO
-				//handle cases where there are collisions.
-				//how to handle the branch that has no easy way to be reinserted into the tree
-				//find minimum in right subtree
-				//copy the value in targeted node
-				//remove the minimum in right subtree
-				//****************WHHHHHOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOPPPPPPPPPSS
-				//I DID THIS AS IF IT WERENT ROOT, BUT IT IS ROOT
-				//MAYBE IT WORKS ANY WAY BUT DOUBLE CHECK
-				//seems to be valid so thumbs up
-				if (temp->Target->right->left == nullptr) {
-					temp->Target->key = temp->Target->right->key;
-					Node<T>* temp2 = temp->Target->right;
-					temp->Target->right = temp->Target->right->right;
-					temp2->right = nullptr;
-					temp2->left = nullptr;
-					delete temp2;
-					exception = true;
-				}
-				else {
-					Node<T>* minimum = FindMinimum(temp->Target->right,temp->Target->right->left);
-					if (minimum->left != nullptr && minimum->left->right != nullptr) {
-						temp->Target->key = minimum->left->key;
-						Node<T>* temp3 = minimum->left;
-						minimum->left = minimum->left->right;
-						temp3->left = nullptr;
-						temp3->right = nullptr;
-						delete temp3;
-
-					}
-					else {
-						temp->Target->key = minimum->left->key;  
-						minimum->left->left = nullptr;
-						minimum->left->right = nullptr;
-						delete minimum->left;
-						minimum->left = nullptr;
-						//delete minimum;
-						exception = true;
-
-						//TODO
-						//I THINK THIS HANDLES ALL CASES EXCEPT WHEN the minimum has a right child
-
-						//THIS TO DO SHOULD BE ABOVE INBETWEEN ELSE AND LINE BELOW MINIMUM
-
-						//THIS IS WHERE YAH DO RECURSION
-
-					}
-
-
-
-
-
-				}
-
-
-
-
-
-				}
-
-			if (!exception) {
-				temp->left = nullptr;
-				temp->right = nullptr;
-				delete temp;
-			}
-			temp->Target_Parent = nullptr;
-			temp->isTarget = false;
-			temp->Target = nullptr;
-		}
-
-	}
-	else {
-		//remove
-		if (temp->Target!= nullptr && (temp->Target->left !=nullptr || temp->Target->right !=nullptr)) {//children
-			//have to reinsert children in tree
-			// //rebalance
-			//TODO
-
-
-			if (temp->Target->left != nullptr && temp->Target->right == nullptr) {
-				
-				//this should mirror the above
-				//except instead of dealing with root
-				//deal with temp->Target_Parent
-				//so copy code and repla
-				if (temp->Target_Parent->left == temp->Target) {
-					temp->Target_Parent->left = temp->Target->left;
-				}
-				else if (temp->Target_Parent->right == temp->Target) {
-					temp->Target_Parent->right = temp->Target->left;
-				}
-				else {
-					//error
-				}
-				//Target_Parent = temp->Target->left;
-				//temp->Target->left = nullptr;
-				//below line is unnecessary
-				//temp->Target->left->right = temp->right
-
-
-
-			}
-			else if(temp->Target->right != nullptr && temp->Target->left == nullptr){
-				if (temp->Target_Parent->left == temp->Target) {
-					temp->Target_Parent->left = temp->Target->right;
-				}
-				else if (temp->Target_Parent->right == temp->Target) {
-					temp->Target_Parent->right = temp->Target->right; //Target parent points to a parent
-					//but it doesnt point from left or right
-					//never change target_parent
-				}
-				//temp->Target->right = nullptr;
-				//below line is unnecessary but it does help in some corner cases
-				//temp->Target->right->left = temp->left //THIS ONLY WORKS IF target has no children
-
-
-
-			}
-			else if (temp->Target->right != nullptr && temp->Target->left != nullptr) {
-
-				//TODO
-
-
-
-				//find minimum in right subtree
-				//copy the value in targeted node
-				//remove the minimum in right subtree
-				//******************* THIS IS THE SAME CODE AS ABOVE but it was done as if it werent root
-				//this should ***************** work , btu above code might not work
-				if (temp->Target->right->left == nullptr) {
-					//this checks to see if the conditions are right for the 
-					//recursion to end in one loop
-					//if it doesnt then the else catches everything else
-					temp->Target->key = temp->Target->right->key;
-					//temp->Target->value = minimum->value;
-					Node<T>* temp2 = temp->Target->right;
-					temp->Target->right = temp->Target->right->right;
-					//do i need to set the pointers to null??
-					temp2->left = nullptr;
-					temp2->right = nullptr;
-					delete temp2;
-					exception = true;
-				}
-				else {
-					Node<T>* minimum = FindMinimum(temp->Target->right, temp->Target->right->left);
-					if (minimum->left != nullptr && minimum->left->right != nullptr) {
-						temp->Target->key = minimum->left->key;
-						Node<T>* temp3 = minimum->left;
-						minimum->left = minimum->left->right;
-						temp3->left = nullptr;
-						temp3->right = nullptr;
-						delete temp3;
-
-					}
-					else {
-						temp->Target->key = minimum->left->key;  //should this dereference?
-						//* in front to derefernce?????????  im not sure
-						//temp->Target->value = minimum->value;
-						// uncomment value if add value to node
-						minimum->left->left = nullptr;
-						minimum->left->right = nullptr;
-						delete minimum->left;
-						minimum->left = nullptr;
-						//delete minimum;
-						exception = true;
-
-						//TODO
-						//I THINK THIS HANDLES ALL CASES EXCEPT WHEN the minimum has a right child
-
-						//THIS TO DO SHOULD BE ABOVE INBETWEEN ELSE AND LINE BELOW MINIMUM
-
-						//THIS IS WHERE YAH DO RECURSION
-
-
-					}
-
-
-				}
-
-
-
-			}
-			/*
-			else {
-				//no children under target, so simply change parents pointer to it to null and delete
-			if(temp->Target_Parent->left==temp->Target)
-				temp->Target_Parent->left = nullptr;
-			else if (temp->Target_Parent->right == temp->Target)
-				temp->Target_Parent->right = nullptr;
-			else {
-				//error
-			}
-			}
-			*/
-
-
-
-			
-			temp->Target_Parent = nullptr;
-			temp->isTarget = false;
-			temp->Target = nullptr;
-			temp->left = nullptr;
-			temp->right = nullptr;
-			delete temp;
-
-		}
-		else {//nochildren
-			//isleaf
-			if (temp->Target_Parent != nullptr && temp->Target != nullptr) {
-
-
-				if (temp->Target_Parent->left == temp->Target) {
-					temp->Target_Parent->left = nullptr;
-				}
-				else {
-					temp->Target_Parent->right = nullptr;
-				}
-
-				temp->isTarget = false;
-				temp->Target_Parent == nullptr;
-				temp->Target == nullptr;
-				temp->left = nullptr;
-				temp->right = nullptr;
-				delete temp;
-
-
-			}
-
-		}
-	}
-}
-
-
 
 
 template <typename T>
@@ -557,14 +293,14 @@ Node<T>* BinarySearchTree<T>::FindTransverseGrandParent(T* inval, Node<T>* paren
 */
 template <typename T>
 Node<T>** BinarySearchTree<T>::GetAllAscending() {
-	int const numnodes = this->Size(0, this->root);
+	int numnodes = this->Size(this->root);
 	Node<T>** arr = new Node<T>*[numnodes];
 	Collect(arr, 0, root);
 	return arr;
 }
 template <typename T>
 Node<T>** BinarySearchTree<T>::GetAllDescending() { 
-	int const numnodes = this->Size(0, this->root);
+	int numnodes = this->Size(this->root);
 	Node<T>** arr = new Node<T>*[numnodes];
 	collect(arr, 0, root);
 	return arr;
@@ -577,29 +313,20 @@ void BinarySearchTree<T>::EmptyTree() // theoretically works by relying on a cas
 
 template <typename T>
 int BinarySearchTree<T>::Collect(Node<T>** arr, int index, Node<T>* node) {
-	//int newindex = index;
+	
 	if (node == nullptr) {
-		//return newindex;
+		
 		return index;
 	}
 
 	index = Collect(arr, index, node->left);
-	//arr[newindex] = node;
-	//newindex+=1;
-	//debugging code
-	//std::cout << "count: "<<newindex << endl;
+	
 
 	arr[index] = node;
 	index += 1;
 	index = Collect(arr, index, node->right);
 	
-	//if (node->left != nullptr) {
-	//	newindex = Collect(arr, newindex, node->left);
-	//}
-	//if (node->right != nullptr) {
-	//	newindex = Collect(arr, newindex, node->right);
-	//}
-	//return newindex;
+	
 	return index;
 
 
@@ -625,21 +352,16 @@ int BinarySearchTree<T>::collect(Node<T>** arr, int index, Node<T>* node) {
 
 }
 template <typename T>
-int BinarySearchTree<T>::Size(int count, Node<T>* node) { 
+int BinarySearchTree<T>::Size(Node<T>* node) { 
 	
 	if (node == nullptr) {
-		return count;
+		return 0;
 	}
-	count += 1;
-	//if (node->left != nullptr) {
-		count = Size(count, node->left);
-	//}
-	//if (node->right != nullptr) {
-		count = Size(count, node->right);
-	//}
-	return count;
 
+	int left_count = Size(node->left);
+	int right_count = Size(node->right);
 
+	return 1 + left_count + right_count;
 	
 }
 template <typename T>
@@ -658,82 +380,12 @@ void BinarySearchTree<T>::Print(Node<T>* toprint) {
 
 }
 
+
+
+
+
+
 template <typename T>
-int BinarySearchTree<T>::GetHeight(Node<T>* current) { 
-	if(current==nullptr)
-		return 0;
-	int L = GetHeight(current->left);
-	int R = GetHeight(current->right);
-	if (L == 0 && R == 0)//(L==nullptr && R==nullptr)
-		return 1;
-	if (L > R) {
-		return 2 + 1;  
-	}
-	else
-	{
-		return R + 1; 
-	}
-	//inserting options:
-	//head->right->right
-	//head->right->left
-	//head->left->right
-	//head->left->left
-}   //This does the rebalancing
-template <typename T>
-void BinarySearchTree<T>::RotateLeft(Node<T>* parent, Node<T>* pivot) { }
-template <typename T>
-void BinarySearchTree<T>::RotateRight(Node<T>* parent, Node<T>* pivot) { 
-	//children
-	bool children = false;
-	if (children) {
-
-		parent->left = parent->left->left;
-		parent->left->right = pivot->left->right;
-		pivot->left->right = pivot;
-	
-	}
-
-
-	if(!children){ 
-	
-		parent->left = parent->left->left;
-		parent->left->right = pivot;
-		pivot->left = nullptr;
-	
-	}	
-	
-}
-template <typename T>
-void BinarySearchTree<T>::RotateLeftRight(Node<T>* parent, Node<T>* pivot) { }
-template <typename T>
-void BinarySearchTree<T>::RotateRightLeft(Node<T>* parent, Node<T>* pivot) { 
-//this is one type, for all children
-	//need to make a type for no children
-	//need to make a type for one child
-	parent->right->left;
-	pivot->right->left = parent->left->right;
-	parent->left->right = pivot->right;
-	//pivot->right->left = nullptr;
-	pivot->right = parent->left->left;
-	parent->left->left = pivot;
-
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-template <class T>
 T* BinarySearchTree<T>::remove(T* inval)
 {
 	if (root==nullptr) // empty tree case
@@ -886,7 +538,7 @@ T* BinarySearchTree<T>::remove(T* inval)
 
 	return retval;
 }
-template <class T>
+template <typename T>
 T* BinarySearchTree<T>::FindSmallestLarger(Node<T>* temp)
 {
 	while (temp->left != nullptr)
@@ -895,7 +547,7 @@ T* BinarySearchTree<T>::FindSmallestLarger(Node<T>* temp)
 	}
 	return temp->key;
 }
-template <class T>
+template <typename T>
 T* BinarySearchTree<T>::FindLargestSmaller(Node<T>* temp)
 {
 	while (temp->right != nullptr)
@@ -906,7 +558,7 @@ T* BinarySearchTree<T>::FindLargestSmaller(Node<T>* temp)
 }
 // Methods for Rotation
 
-template <class T>
+template <typename T>
 int BinarySearchTree<T>::Height(Node<T>* current, Node<T>* parent)
 {
 	// base case
@@ -958,7 +610,7 @@ int BinarySearchTree<T>::Height(Node<T>* current, Node<T>* parent)
 	return R + 1;
 }
 
-template <class T>
+template <typename T>
 void BinarySearchTree<T>::rotateLeft(Node<T>* parent, Node<T>* pivot) // written in class, should work
 {
 	if (pivot == root)
@@ -981,7 +633,7 @@ void BinarySearchTree<T>::rotateLeft(Node<T>* parent, Node<T>* pivot) // written
 	}
 }
 
-template <class T>
+template <typename T>
 void BinarySearchTree<T>::rotateRight(Node<T>* parent, Node<T>* pivot) // inverse of what was written in class
 {
 	if (pivot == root)
@@ -1004,7 +656,7 @@ void BinarySearchTree<T>::rotateRight(Node<T>* parent, Node<T>* pivot) // invers
 	}
 }
 
-template <class T>
+template <typename T>
 void BinarySearchTree<T>::rotateRightLeft(Node<T>* parent, Node<T>* pivot)
 {
 	if (pivot == root) // NOT DONE IN CLASS
@@ -1038,7 +690,7 @@ void BinarySearchTree<T>::rotateRightLeft(Node<T>* parent, Node<T>* pivot)
 }
 
 
-template <class T>
+template <typename T>
 void BinarySearchTree<T>::rotateLeftRight(Node<T>* parent, Node<T>* pivot)
 {
 	if (pivot == root) // pivot is root (in class)
@@ -1072,7 +724,7 @@ void BinarySearchTree<T>::rotateLeftRight(Node<T>* parent, Node<T>* pivot)
 }
 
 
-template <class T>
+template <typename T>
 T* BinarySearchTree<T>::Find(T* inval) // returns pointer to data of the node (could be edited to return entire node if needed
 {
 	if (Size(0, root) == 0)
@@ -1103,7 +755,7 @@ T* BinarySearchTree<T>::Find(T* inval) // returns pointer to data of the node (c
 	}
 }
 
-template <class T>
+template <typename T>
 void BinarySearchTree<T>::PrintVect(Node<T>** vects)
 {
 	for (int i = 0; i < Size(0, root); i++)
@@ -1112,3 +764,511 @@ void BinarySearchTree<T>::PrintVect(Node<T>** vects)
 		cout << *vects[i]->key << endl;
 	}
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//**********************************************************************************************************
+//BAD CODE BELOW
+//**********************************************************************************************************
+//DONT USE these functions
+//IGNORE THIS CODE IF REVIEWING IT
+//**********************************************************************************************************
+//**********************************************************************************************************
+//**********************************************************************************************************
+	
+template <typename T>
+int BinarySearchTree<T>::GetHeight(Node<T>* current) {
+	if (current == nullptr)
+		return 0;
+	int L = GetHeight(current->left);
+	int R = GetHeight(current->right);
+	if (L == 0 && R == 0)//(L==nullptr && R==nullptr)
+		return 1;
+	if (L > R) {
+		return 2 + 1;
+	}
+	else
+	{
+		return R + 1;
+	}
+	//inserting options:
+	//head->right->right
+	//head->right->left
+	//head->left->right
+	//head->left->left
+}   //This does the rebalancing
+template <typename T>
+void BinarySearchTree<T>::RotateLeft(Node<T>* parent, Node<T>* pivot) { }
+template <typename T>
+void BinarySearchTree<T>::RotateRight(Node<T>* parent, Node<T>* pivot) {
+	//children
+	bool children = false;
+	if (children) {
+
+		parent->left = parent->left->left;
+		parent->left->right = pivot->left->right;
+		pivot->left->right = pivot;
+
+	}
+
+
+	if (!children) {
+
+		parent->left = parent->left->left;
+		parent->left->right = pivot;
+		pivot->left = nullptr;
+
+	}
+
+}
+template <typename T>
+void BinarySearchTree<T>::RotateLeftRight(Node<T>* parent, Node<T>* pivot) { }
+template <typename T>
+void BinarySearchTree<T>::RotateRightLeft(Node<T>* parent, Node<T>* pivot) {
+	//this is one type, for all children
+		//need to make a type for no children
+		//need to make a type for one child
+	parent->right->left;
+	pivot->right->left = parent->left->right;
+	parent->left->right = pivot->right;
+	//pivot->right->left = nullptr;
+	pivot->right = parent->left->left;
+	parent->left->left = pivot;
+
+}
+
+
+
+
+template <typename T>
+void BinarySearchTree<T>::Remove(T* inval) {
+
+
+	//*******************************************************************************************
+	//REMOVE FUNCTION
+	//DELETEING A NODE CAUSES A CHAIN REACTION of deleting all nodes below it,
+	//Even if its temp
+	//change left and right pointers to nullptrs  before manually deleting node in this function
+	//******************************************************************************************
+
+
+	//these functions Remove should rebalance if necessary
+		//this is inefficient
+	//Node<T>* tempgrandchild = FindTransverse(inval, root);
+	//bool children = false;
+	Node<T>* temp = FindTransverseFamily(inval, root, nullptr, nullptr);
+	bool exception = false;
+	if (temp == nullptr) {
+		return; //nothing to remove   SHould PRINT OUT A THROW EXCEPTION BUT KEEP PROGRAM RUNNING
+	}
+	else if (temp->isTarget) {
+		if (temp->left == nullptr && temp->right == nullptr) {
+			//target is root and is the only node in tree
+			temp->isTarget = false;
+			temp->Target = nullptr;
+			root = nullptr;
+			delete temp;    //********************** remove if u dont want to delete but want to fetch it
+			//no rebalancing necessary here
+		}
+		else {
+			//TODO
+			//what to do if root has children
+			//rebalance? or just remove and let rebalancing handle it? or just remove and dont rebalance?
+
+			if (temp->Target->left != nullptr && temp->Target->right == nullptr) {
+				root = temp->Target->left;
+				//temp->Target->left = nullptr;
+				//below line is unnecessary
+				//temp->Target->left->right= temp->right //THIS ONLY WORKS IF target has no children
+					//TO DO
+					//could put conditionals where if temp->right and temp->Target->left->right are not null then do somethign differeent
+					//conditoinal would have to be above the above line
+					//but it conflicts with the above if condition
+			}
+			else if (temp->Target->right != nullptr && temp->Target->left == nullptr) {
+				root = temp->Target->right;
+				//temp->Target->right = nullptr;
+				//below line is unnecessary but it does help in some corner cases
+				//temp->Target->right->left = temp->left //THIS ONLY WORKS IF target has no children
+					//TO DO
+					//could put conditionals where if temp->left and temp->Target->right->left are not null then do somethign differeent
+					//conditional would have to be above the above line
+					//but it conflicts with the above else if condition
+			}
+			else if (temp->Target->right != nullptr && temp->Target->left != nullptr) {
+				//TO DO
+				//handle cases where there are collisions.
+				//how to handle the branch that has no easy way to be reinserted into the tree
+				//find minimum in right subtree
+				//copy the value in targeted node
+				//remove the minimum in right subtree
+				//****************WHHHHHOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOPPPPPPPPPSS
+				//I DID THIS AS IF IT WERENT ROOT, BUT IT IS ROOT
+				//MAYBE IT WORKS ANY WAY BUT DOUBLE CHECK
+				//seems to be valid so thumbs up
+				if (temp->Target->right->left == nullptr) {
+					temp->Target->key = temp->Target->right->key;
+					Node<T>* temp2 = temp->Target->right;
+					temp->Target->right = temp->Target->right->right;
+					temp2->right = nullptr;
+					temp2->left = nullptr;
+					delete temp2;
+					exception = true;
+				}
+				else {
+					Node<T>* minimum = FindMinimum(temp->Target->right, temp->Target->right->left);
+					if (minimum->left != nullptr && minimum->left->right != nullptr) {
+						temp->Target->key = minimum->left->key;
+						Node<T>* temp3 = minimum->left;
+						minimum->left = minimum->left->right;
+						temp3->left = nullptr;
+						temp3->right = nullptr;
+						delete temp3;
+
+					}
+					else {
+						temp->Target->key = minimum->left->key;
+						minimum->left->left = nullptr;
+						minimum->left->right = nullptr;
+						delete minimum->left;
+						minimum->left = nullptr;
+						//delete minimum;
+						exception = true;
+
+						//TODO
+						//I THINK THIS HANDLES ALL CASES EXCEPT WHEN the minimum has a right child
+
+						//THIS TO DO SHOULD BE ABOVE INBETWEEN ELSE AND LINE BELOW MINIMUM
+
+						//THIS IS WHERE YAH DO RECURSION
+
+					}
+
+
+
+
+
+				}
+
+
+
+
+
+			}
+
+			if (!exception) {
+				temp->left = nullptr;
+				temp->right = nullptr;
+				delete temp;
+			}
+			temp->Target_Parent = nullptr;
+			temp->isTarget = false;
+			temp->Target = nullptr;
+		}
+
+	}
+	else {
+		//remove
+		if (temp->Target != nullptr && (temp->Target->left != nullptr || temp->Target->right != nullptr)) {//children
+			//have to reinsert children in tree
+			// //rebalance
+			//TODO
+
+
+			if (temp->Target->left != nullptr && temp->Target->right == nullptr) {
+
+				//this should mirror the above
+				//except instead of dealing with root
+				//deal with temp->Target_Parent
+				//so copy code and repla
+				if (temp->Target_Parent->left == temp->Target) {
+					temp->Target_Parent->left = temp->Target->left;
+				}
+				else if (temp->Target_Parent->right == temp->Target) {
+					temp->Target_Parent->right = temp->Target->left;
+				}
+				else {
+					//error
+				}
+				//Target_Parent = temp->Target->left;
+				//temp->Target->left = nullptr;
+				//below line is unnecessary
+				//temp->Target->left->right = temp->right
+
+
+
+			}
+			else if (temp->Target->right != nullptr && temp->Target->left == nullptr) {
+				if (temp->Target_Parent->left == temp->Target) {
+					temp->Target_Parent->left = temp->Target->right;
+				}
+				else if (temp->Target_Parent->right == temp->Target) {
+					temp->Target_Parent->right = temp->Target->right; //Target parent points to a parent
+					//but it doesnt point from left or right
+					//never change target_parent
+				}
+				//temp->Target->right = nullptr;
+				//below line is unnecessary but it does help in some corner cases
+				//temp->Target->right->left = temp->left //THIS ONLY WORKS IF target has no children
+
+
+
+			}
+			else if (temp->Target->right != nullptr && temp->Target->left != nullptr) {
+
+				//TODO
+
+
+
+				//find minimum in right subtree
+				//copy the value in targeted node
+				//remove the minimum in right subtree
+				//******************* THIS IS THE SAME CODE AS ABOVE but it was done as if it werent root
+				//this should ***************** work , btu above code might not work
+				if (temp->Target->right->left == nullptr) {
+					//this checks to see if the conditions are right for the 
+					//recursion to end in one loop
+					//if it doesnt then the else catches everything else
+					temp->Target->key = temp->Target->right->key;
+					//temp->Target->value = minimum->value;
+					Node<T>* temp2 = temp->Target->right;
+					temp->Target->right = temp->Target->right->right;
+					//do i need to set the pointers to null??
+					temp2->left = nullptr;
+					temp2->right = nullptr;
+					delete temp2;
+					exception = true;
+				}
+				else {
+					Node<T>* minimum = FindMinimum(temp->Target->right, temp->Target->right->left);
+					if (minimum->left != nullptr && minimum->left->right != nullptr) {
+						temp->Target->key = minimum->left->key;
+						Node<T>* temp3 = minimum->left;
+						minimum->left = minimum->left->right;
+						temp3->left = nullptr;
+						temp3->right = nullptr;
+						delete temp3;
+
+					}
+					else {
+						temp->Target->key = minimum->left->key;  //should this dereference?
+						//* in front to derefernce?????????  im not sure
+						//temp->Target->value = minimum->value;
+						// uncomment value if add value to node
+						minimum->left->left = nullptr;
+						minimum->left->right = nullptr;
+						delete minimum->left;
+						minimum->left = nullptr;
+						//delete minimum;
+						exception = true;
+
+						//TODO
+						//I THINK THIS HANDLES ALL CASES EXCEPT WHEN the minimum has a right child
+
+						//THIS TO DO SHOULD BE ABOVE INBETWEEN ELSE AND LINE BELOW MINIMUM
+
+						//THIS IS WHERE YAH DO RECURSION
+
+
+					}
+
+
+				}
+
+
+
+			}
+			/*
+			else {
+				//no children under target, so simply change parents pointer to it to null and delete
+			if(temp->Target_Parent->left==temp->Target)
+				temp->Target_Parent->left = nullptr;
+			else if (temp->Target_Parent->right == temp->Target)
+				temp->Target_Parent->right = nullptr;
+			else {
+				//error
+			}
+			}
+			*/
+
+
+
+
+			temp->Target_Parent = nullptr;
+			temp->isTarget = false;
+			temp->Target = nullptr;
+			temp->left = nullptr;
+			temp->right = nullptr;
+			delete temp;
+
+		}
+		else {//nochildren
+			//isleaf
+			if (temp->Target_Parent != nullptr && temp->Target != nullptr) {
+
+
+				if (temp->Target_Parent->left == temp->Target) {
+					temp->Target_Parent->left = nullptr;
+				}
+				else {
+					temp->Target_Parent->right = nullptr;
+				}
+
+				temp->isTarget = false;
+				temp->Target_Parent == nullptr;
+				temp->Target == nullptr;
+				temp->left = nullptr;
+				temp->right = nullptr;
+				delete temp;
+
+
+			}
+
+		}
+	}
+}
+
+
+
+//OLD CODE BELOW 
+//DEFUNCT CODE
+//ignore
+//only saved incase wanna quickly change how saving functionality works
+
+
+//template <typename T>
+//void BinarySearchTree<T>::Save_Encode_File(string file) {
+//	fstream data;
+//	data.open(file, ios::out); //| ios::app);
+//
+//	if (!data) {
+//		cout << "Unable to open file" << endl;
+//	}
+//	else {
+//		Node<T>** temp1 = GetAllAscending();	
+//		Customer* temp;
+//		
+//		//if(true){
+//		if (typeid(temp1[0]->key) == typeid(Customer*)) {
+//
+//
+//			for (int i = 0; i < Size(root); i++) {
+//				//WRITE
+//				//ENCODE
+//				temp = temp1[i]->key;
+//				//std::ostringstream oss;
+//				std::string stringify;
+//				//oss << temp->CID;
+//				stringify = to_string(temp->CID);
+//				//stringify = oss.str();
+//
+//				data<< Hash_Encoder("CID: ") << Hash_Encoder(stringify) << endl;
+//				stringify = temp->Name;
+//				data<< Hash_Encoder("Name: ") << Hash_Encoder(stringify) << endl;
+//				stringify = temp->Username;
+//				data<< Hash_Encoder("UserName: ") << Hash_Encoder(stringify) << endl;
+//				stringify = temp->AccType;
+//				data<< Hash_Encoder("Account Type: ") << Hash_Encoder(stringify) << endl;
+//				stringify = temp->Org;
+//				data<< Hash_Encoder("Organization: ") << Hash_Encoder(stringify) << endl;
+//				stringify = temp->Status;
+//				data<< Hash_Encoder("Status: ") << Hash_Encoder(stringify) << endl;
+//				stringify = temp->DOB;
+//				data<< Hash_Encoder("DOB: ") << Hash_Encoder(stringify) << endl;
+//				stringify = temp->DOJ;
+//				data<< Hash_Encoder("DOJ: ") << Hash_Encoder(stringify) << endl;
+//				//oss << temp->SSN;
+//				stringify = to_string(temp->SSN);
+//				//stringify = oss.str();
+//				data<< Hash_Encoder("SSN: ") << Hash_Encoder(stringify) << endl;
+//				//oss << temp->current_balance;
+//				stringify = to_string(temp->current_balance);
+//				//stringify = oss.str();
+//				data<< Hash_Encoder("Current Balance: ") << Hash_Encoder(stringify) << endl;
+//				data << endl;
+//			}
+//
+//		}
+//		else {
+//
+//
+//			//for (int i = 0; i < Size(root); i++) {
+//			//	//WRITE
+//			//	//ENCODE
+//
+//
+//			//	std::ostringstream oss;
+//			//	if constexpr (std::is_pointer<T>::value) {
+//			//		oss << *temp[i]->key;
+//			//	}
+//			//	else {
+//			//		oss << temp[i]->key;
+//			//	}
+//			//	std::string stringify = oss.str();
+//
+//
+//
+//			//	data << Hash_Encoder(stringify) << endl;
+//			//}
+//		}
+//		
+//		
+//	}
+//
+//	data.close();
+//
+//
+//	//UMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM THIS SHOULDN'T APPEND IT SHOULD OVERWRITE
+//	//OTHERWISE it'll keep old accounts and make duplicates even after changes
+//	//but do keep a backupfile
+//
+//}
+
+//template <typename T>
+//void BinarySearchTree<T>::Load_Decode_File(string file) {
+//	fstream data;
+//	data.open(file, ios::in);
+//	if (data.is_open()) {
+//
+//		//
+//		// READ
+//		while (!data.eof()) {
+//			long CID;
+//			string Username;
+//			string Name;
+//			string AccType;
+//			string Org;
+//			string Status;
+//			string DOB;
+//			string DOJ;
+//			long SSN;
+//			string Password;
+//			//data >> CID >> Username >> Name >> AccType >> Org >> Status >> DOB >> DOJ >> SSN >> Password;
+//			Customer* person = new Customer(CID, Username, Name, AccType, Org, Status, DOB, DOJ, SSN, Password);
+//			//collection.addItem(person);
+//			this.addItem(person);
+//		}
+//
+//		//DECODE
+//		//Keep it simple  HASH ascii
+//
+//
+//		//INSERT INTO TREE,  WATCH OUT FOR DUPLICATES
+//	}
+//	data.close();
+//}
