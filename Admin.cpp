@@ -86,8 +86,8 @@ float Admin::blockNegativeAccount(vector<Customer*> nega, int CID) {
 float Admin::generateSummaryReport(vector<Customer*> posi, vector<Customer*> nega, BinarySearchTree<Customer>* collection) {
     
     //
-    cout << endl << "******Summary Report******: " << endl << collection->size << endl;
-    cout << endl << "Total Customers are: " << endl << collection->size << endl;
+    cout << endl << "******Summary Report******: " << endl << collection->Size(collection->root) << endl;
+    cout << endl << "Total Customers are: " << endl << collection->Size(collection->root) << endl;
     cout << "Accounts with positve balances: \n";
     for (int k = 0; k < posi.size(); k++) {
         //cout << "Username: " << posi[k]->Username << " " << "Name: " << posi[k]->Name << " Balance: " << posi[k]->current_balance << endl;
@@ -149,11 +149,11 @@ string Admin::GetPassword(){
 
 
 void Admin::TotalCustomers(BinarySearchTree<Customer>* collection) {
-    cout << endl << "Total Customers are: " << endl << collection->size << endl;
+    cout << endl << "Total Customers are: " << endl << collection->Size(collection->root) << endl;
 }
 void Admin::TotalActiveCustomers(BinarySearchTree<Customer>* collection) {
     //modify to remove blocked accounts
-    cout << endl << "Total Active Customers are: " << endl << collection->size << endl;
+    cout << endl << "Total Active Customers are: " << endl << collection->Size(collection->root) << endl;
 }
 
 void Admin::Total_pos_vebalances(vector<Customer*> posi) {

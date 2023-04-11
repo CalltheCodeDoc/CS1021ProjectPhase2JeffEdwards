@@ -224,12 +224,15 @@ Customer* Customer::Load_Decode_File1(fstream& data) {
             if (count==11) {
                 break;
             }
-            if ((temp[0] == ' ' || temp[0] == '/n')) {
-                return nullptr;
+            if (temp[0] == 'x' && temp[1] == 'x') {
+                break;
             }
             
 
 
+        }
+        if (count < 7) {
+            return nullptr;
         }
         return person;
     }
@@ -279,7 +282,8 @@ void Customer::Save_Encode_File1(fstream& data) {
                 data << Hash_Encoder("Current Balance: ") << endl << Hash_Encoder(stringify) << endl;
                 stringify = Password;
                 data << Hash_Encoder("Password: ") << endl << Hash_Encoder(stringify) << endl;
-                data << endl;
+                data << "xxx" << endl;
+                data << "xxx" << endl;
             }
 
         }
@@ -396,7 +400,7 @@ bool Customer::operator ==(Customer& const other) {
     else
         return false;
 }
-ostream& operator <<(ostream& out, const Customer& other) {
+ostream& operator <<(ostream& out, Customer& other) {
     out << "CID: " << other.CID << "\nUserName: " << other.Username << "\nAccount Type: " << other.AccType << "\nOrganization: " << other.Org << "\nStatus: " << other.Status << "\nDOB: " << other.DOB << "\nDOJ: " << other.DOJ << "\nSSN: " << other.SSN << "\nCurrent Balance: " << other.current_balance << endl;
     return out;
 }
@@ -443,10 +447,12 @@ std::istream& operator>>(std::istream& is, Customer& other) {
 
     std::cout << "Current Balance: ";
     is >> other.current_balance;
+    other.transaction(other.current_balance);
 
     return is;
 }
 
+//can we operator overload to make the print to file work with template along with add above stream
       
 void Customer::TransfertootherCID() {
     //not yet implemented

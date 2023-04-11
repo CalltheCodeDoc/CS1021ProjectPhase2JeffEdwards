@@ -3,8 +3,6 @@
 #include <iomanip>
 #include <vector>
 #include "Customer.h"
-//#include "Shelf.h"
-//#include "EntertainmentCollection.h"
 //#include <fstream>
 #include <chrono>
 //#include <windows.h>
@@ -21,26 +19,14 @@
 using namespace std;
 
 
-//TODO:
-//1)UPDATE INFORMATION STORAGE to be more in line with requirements
-//
-// 2) DECODE still truncates 2 customers oddly..
-// 
-// 
-//4)   Make displays update informatoin,  HINT have to create dataobjects that reference the information not copy it
-//
-//
-//8)  Transaction history on initial balance creation doesnt work and update
+//TODO: 
+//4)   Posi and nega vectors include copies of values not pointers, so they dont update live
 // 
 // 
 // 10)   implement transferCID    && active customers
 // 
 // 
-// 11)  make transaction table a 2 vectors and actually store the type of transaction
-// 
-// 
 // 12) double check project requirements to make sure all requirements are met
-// 
 
 
 //**************************************************************************
@@ -85,7 +71,13 @@ Customer* aptr;   //pointer to customers information
 bool cuyes;
 bool adyes;
 
-
+//************************************************************************
+//*************************************************************************
+//if customers for some reason bugs out
+//change preload to false
+//and exit through admin or customer logout to save a new customers file
+//***************************************************************************
+//***************************************************************************
 bool preload = true;
 
 
@@ -537,7 +529,7 @@ Customer* searchcollection(string namen) {
     Node<Customer>** temp = collection->GetAllDescending();
     bool incol = false;
     //collection
-    if (collection->size == 0) {
+    if (collection->Size(collection->root) == 0) {
         return nullptr;
     }
     else {
@@ -557,16 +549,16 @@ Customer* searchcollection(string namen) {
 //overloaded for admin functionality,  return a list of negative or positive balances
 //*********************************************************************************
 void search_collect(bool negpos) {
- 
+   
     Node<Customer>* aptr2;
     bool incol = false;
     Node<Customer>** temp = collection->GetAllAscending();
   
-    if (collection->size == 0) {
+    if (collection->Size(collection->root) == 0) {
         return;
     }
     else {
-        for (int i = 0; i < collection->size; i++) {
+        for (int i = 0; i < collection->Size(collection->root); i++) {
             aptr2 = temp[i];  
             if (negpos) {
                 if (aptr2->key->current_balance >= 0) {

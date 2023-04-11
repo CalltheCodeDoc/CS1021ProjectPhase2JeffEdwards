@@ -79,6 +79,12 @@ void BinarySearchTree<T>::Load_Decode_File(string file) {
 			//WRITE
 			//ENCODE;
 
+			//TOO TEMPLATE THIS PROPERLY
+			//CHANGE ABOVE CUSTOMER DECLARATION TO T* declarations
+			//remove decode method which is a customer method
+			//add an overload for for fstream and istream/ostream.
+			//then do an << or >> here, which the overload handled in customer class will actually handle
+			//decode and encode etc without explicitly calling a customer method
 			
 			//temp = temp1[i]->key;
 			temp =temp1->Load_Decode_File1(data);
