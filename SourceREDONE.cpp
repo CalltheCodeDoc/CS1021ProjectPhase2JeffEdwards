@@ -20,6 +20,27 @@ using namespace std;
 
 
 //TODO: 
+// 
+// 
+// 1)  Submit the Report and sample execution of the Application.
+// Submit the Report and sample execution of the Application.
+// Submit the Report and sample execution of the Application.
+// Submit the Report and sample execution of the Application.
+// Submit the Report and sample execution of the Application.
+// Submit the Report and sample execution of the Application.
+// Submit the Report and sample execution of the Application.
+// Submit the Report and sample execution of the Application.
+// Submit the Report and sample execution of the Application.
+// Submit the Report and sample execution of the Application.
+
+//Submit the Reportand sample execution of the Application.
+// Submit the Report and sample execution of the Application.
+// 
+// 
+// 
+// 
+// 
+// 
 //4)   Posi and nega vectors include copies of values not pointers, so they dont update live
 // 
 // 
@@ -27,6 +48,15 @@ using namespace std;
 // 
 // 
 // 12) double check project requirements to make sure all requirements are met
+
+
+
+//STL:
+
+//pairs(for two types of data types like in transaction vector, copy constructors, maps, useful functions
+//inserting into map is similar to array insertoins instead of index its key in the brackets
+//also use STL.find() to find a key in a map
+//use this instead of ur goofy functions
 
 
 //**************************************************************************
@@ -127,7 +157,7 @@ int main()
     }
     
 
-
+    
 
     //functions that load up two admin functions (positive and negative accounts)
     search_collect(true);

@@ -6,6 +6,7 @@
 #include <iostream>
 //#include <istream>
 #include "TablePrinter.h"
+#include <fstream>
 
 using namespace std;
 
@@ -95,6 +96,9 @@ private:
         friend ostream& operator<<(ostream& out, const Customer& other);
         friend istream& operator>>(istream& in, Customer& other);
 
+
+        friend fstream& operator<<(fstream& out, Customer* other);
+        friend fstream& operator>>(std::fstream& is, Customer** other);
 
 
         void TransfertootherCID();

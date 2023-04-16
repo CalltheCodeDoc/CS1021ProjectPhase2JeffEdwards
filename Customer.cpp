@@ -239,7 +239,194 @@ Customer* Customer::Load_Decode_File1(fstream& data) {
 }
 
 
+fstream& operator<<(fstream& data, Customer* other) {
+    if (!data) {
+        cout << "Unable to open file" << endl;
+    }
+    else {
 
+
+
+        //std::ostringstream oss;
+        std::string stringify;
+        //oss << temp->CID;
+        stringify = to_string(other->CID);
+        //stringify = oss.str();
+
+        data << other->Hash_Encoder("CID: ") << endl << other->Hash_Encoder(stringify) << endl;
+        stringify = other->Name;
+        data << other->Hash_Encoder("Name: ") << endl << other->Hash_Encoder(stringify) << endl;
+        stringify = other->Username;
+        data << other->Hash_Encoder("UserName: ") << endl << other->Hash_Encoder(stringify) << endl;
+        stringify = other->AccType;
+        data << other->Hash_Encoder("Account Type: ") << endl << other->Hash_Encoder(stringify) << endl;
+        stringify = other->Org;
+        data << other->Hash_Encoder("Organization: ") << endl << other->Hash_Encoder(stringify) << endl;
+        stringify = other->Status;
+        data << other->Hash_Encoder("Status: ") << endl << other->Hash_Encoder(stringify) << endl;
+        stringify = other->DOB;
+        data << other->Hash_Encoder("DOB: ") << endl << other->Hash_Encoder(stringify) << endl;
+        stringify = other->DOJ;
+        data << other->Hash_Encoder("DOJ: ") << endl << other->Hash_Encoder(stringify) << endl;
+        //oss << temp->SSN;
+        stringify = to_string(other->SSN);
+        //stringify = oss.str();
+        data << other->Hash_Encoder("SSN: ") << endl << other->Hash_Encoder(stringify) << endl;
+        //oss << temp->current_balance;
+        stringify = to_string(other->current_balance);
+        //stringify = oss.str();
+        data << other->Hash_Encoder("Current Balance: ") << endl << other->Hash_Encoder(stringify) << endl;
+        stringify = other->Password;
+        data << other->Hash_Encoder("Password: ") << endl << other->Hash_Encoder(stringify) << endl;
+        //data << "xxx" << endl;
+        //data << "xxx" << endl;
+    }
+    return data;
+}
+fstream& operator>>(std::fstream& data, Customer** other) {
+    //need a pointer to a pointer 
+    //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    //! for other
+    if (!data) {
+        cout << "Unable to open file" << endl;
+    }
+    else {
+
+        //Customer* person = new Customer();
+        string temp;
+        string temp2;
+        string temp3;
+        bool TERMINATION_CONDITION;
+        int count = 0;
+
+        while (data) {
+            getline(data, temp);
+            //this if condition might be problematic and not work as intended
+            /*if ((temp==" "|| temp =="/n")&&(count>15||count==0 )) {
+                TERMINATION_CONDITION = true;
+                return nullptr
+                break;
+            }*/
+            if (temp[0] == (*other)->Hash_Encoder("CID: ")[0] && temp[1] == (*other)->Hash_Encoder("CID: ")[1] && temp[2] == (*other)->Hash_Encoder("CID: ")[2]) {
+                getline(data, temp2);
+                temp3 = (*other)->Hash_Decoder(temp2);
+                (*other)->CID = (long)stoi(temp3);
+                count++;
+                if (count == 11) {
+                    break;
+                }
+            }
+            else if (temp == (*other)->Hash_Encoder("Name: ")) {
+
+                getline(data, temp2);
+                temp3 = (*other)->Hash_Decoder(temp2);
+                (*other)->Name = temp3;
+                count++;
+                if (count == 11) {
+                    break;
+                }
+            }
+            else if (temp == (*other)->Hash_Encoder("UserName: ")) {
+                getline(data, temp2);
+                temp3 = (*other)->Hash_Decoder(temp2);
+                (*other)->Username = temp3;
+                count++;
+                if (count == 11) {
+                    break;
+                }
+            }
+            else if (temp == (*other)->Hash_Encoder("Account Type: ")) {
+                getline(data, temp2);
+                temp3 = (*other)->Hash_Decoder(temp2);
+
+                (*other)->AccType = temp3;
+                count++;
+                if (count == 11) {
+                    break;
+                }
+            }
+            else if (temp == (*other)->Hash_Encoder("Organization: ")) {
+                getline(data, temp2);
+                temp3 = (*other)->Hash_Decoder(temp2);
+                (*other)->Org = temp3;
+                count++;
+                if (count == 11) {
+                    break;
+                }
+            }
+            else if (temp == (*other)->Hash_Encoder("Status: ")) {
+                getline(data, temp2);
+                temp3 = (*other)->Hash_Decoder(temp2);
+                (*other)->Status = temp3;
+                count++;
+                if (count == 11) {
+                    break;
+                }
+            }
+            else if (temp == (*other)->Hash_Encoder("DOB: ")) {
+                getline(data, temp2);
+                temp3 = (*other)->Hash_Decoder(temp2);
+                (*other)->DOB = temp3;
+                count++;
+                if (count == 11) {
+                    break;
+                }
+            }
+            else if (temp == (*other)->Hash_Encoder("DOJ: ")) {
+                getline(data, temp2);
+                temp3 = (*other)->Hash_Decoder(temp2);
+                (*other)->DOJ = temp3;
+                count++;
+                if (count == 11) {
+                    break;
+                }
+            }
+            else if (temp == (*other)->Hash_Encoder("SSN: ")) {
+                getline(data, temp2);
+                temp3 = (*other)->Hash_Decoder(temp2);
+                (*other)->SSN = (long)stoi(temp3);
+                count++;
+                if (count == 11) {
+                    break;
+                }
+            }
+            else if (temp == (*other)->Hash_Encoder("Current Balance: ")) {
+                getline(data, temp2);
+                temp3 = (*other)->Hash_Decoder(temp2);
+                (*other)->current_balance = (long)stoi(temp3);
+                count++;
+                if (count == 11) {
+                    break;
+                }
+            }
+            else if (temp == (*other)->Hash_Encoder("Password: ")) {
+                getline(data, temp2);
+                temp3 = (*other)->Hash_Decoder(temp2);
+                (*other)->Password = temp3;
+                count++;
+                if (count == 11) {
+                    break;
+                }
+            }
+            if (count == 11) {
+                break;
+            }
+            if (temp[0] == 'x' && temp[1] == 'x') {
+                break;
+            }
+
+
+
+        }
+        if (count < 7) {
+            *other = nullptr;
+            return data;
+        }
+        else {
+            return data;
+        }
+    }
+}
 
 
 void Customer::Save_Encode_File1(fstream& data) {
@@ -404,6 +591,8 @@ ostream& operator <<(ostream& out, Customer& other) {
     out << "CID: " << other.CID << "\nUserName: " << other.Username << "\nAccount Type: " << other.AccType << "\nOrganization: " << other.Org << "\nStatus: " << other.Status << "\nDOB: " << other.DOB << "\nDOJ: " << other.DOJ << "\nSSN: " << other.SSN << "\nCurrent Balance: " << other.current_balance << endl;
     return out;
 }
+
+
 /*
 istream& operator >>(istream& in, const Customer& other) {
     cout << "CID: ";

@@ -38,25 +38,25 @@ string BinarySearchTree<T>::Hash_Decoder(string input) {
 	return temp;
 }
 
+
+
 template<typename T>
-void BinarySearchTree<T>::Save_Encode_File(string file){
+void BinarySearchTree<T>::Save_Encode_File(string file) {
 	fstream data;
-		data.open(file, ios::out); //| ios::app);
-	
-		if (!data) {
-			cout << "Unable to open file" << endl;
+	data.open(file, ios::out); //| ios::app);
+
+	if (!data) {
+		cout << "Unable to open file" << endl;
+	}
+	else {
+		Node<T>** temp1 = GetAllAscending();
+		for (int i = 0; i < Size(root); i++) {
+			//WRITE
+			//ENCODE;
+			data<< temp1[i]->key;
 		}
-		else {
-			Node<T>** temp1 = GetAllAscending();
-			Customer* temp;
-			for (int i = 0; i < Size(root); i++) {
-				//WRITE
-				//ENCODE;
-				temp = temp1[i]->key;
-				temp->Save_Encode_File1(data);
-			}
-		}
-		data.close();
+	}
+	data.close();
 
 }
 
@@ -71,27 +71,23 @@ void BinarySearchTree<T>::Load_Decode_File(string file) {
 	}
 	else {
 
-		Customer* temp;
-		Customer* temp1= new Customer();
-		
-		//for (int i = 0; i < Size(root); i++) {
-		while(data){
+		while (data) {
 			//WRITE
 			//ENCODE;
+			//overloaded required
 
-			//TOO TEMPLATE THIS PROPERLY
-			//CHANGE ABOVE CUSTOMER DECLARATION TO T* declarations
-			//remove decode method which is a customer method
-			//add an overload for for fstream and istream/ostream.
-			//then do an << or >> here, which the overload handled in customer class will actually handle
-			//decode and encode etc without explicitly calling a customer method
-			
+			T* temp = new T();
 			//temp = temp1[i]->key;
-			temp =temp1->Load_Decode_File1(data);
+			if(temp == nullptr) {
+				continue;
+			}
+			data>>(& temp);
 			if (temp == nullptr) {
 				continue;
 			}
 			else {
+				//IF USE THIS FUNCTIONALITY IN FUTURE TO PRINT DECODE BASED ON OVERLOAD, remove this if statement
+				//if(temp->CID!=0) //THIS breaks in different template cases but i have no idea how to not do this any other way
 				Insert(temp, root);
 			}
 		}
@@ -99,6 +95,69 @@ void BinarySearchTree<T>::Load_Decode_File(string file) {
 	data.close();
 
 }
+
+
+//template<typename T>
+//void BinarySearchTree<T>::Save_Encode_File(string file){
+//	fstream data;
+//		data.open(file, ios::out); //| ios::app);
+//	
+//		if (!data) {
+//			cout << "Unable to open file" << endl;
+//		}
+//		else {
+//			Node<T>** temp1 = GetAllAscending();
+//			Customer* temp;
+//			for (int i = 0; i < Size(root); i++) {
+//				//WRITE
+//				//ENCODE;
+//				temp = temp1[i]->key;
+//				temp->Save_Encode_File1(data);
+//			}
+//		}
+//		data.close();
+//
+//}
+//
+//
+//template<typename T>
+//void BinarySearchTree<T>::Load_Decode_File(string file) {
+//	fstream data;
+//	data.open(file, ios::in); //| ios::app);
+//
+//	if (!data) {
+//		cout << "Unable to open file" << endl;
+//	}
+//	else {
+//
+//		Customer* temp;
+//		Customer* temp1= new Customer();
+//		
+//		//for (int i = 0; i < Size(root); i++) {
+//		while(data){
+//			//WRITE
+//			//ENCODE;
+//
+//			//TOO TEMPLATE THIS PROPERLY
+//			//CHANGE ABOVE CUSTOMER DECLARATION TO T* declarations
+//			//remove decode method which is a customer method
+//			//add an overload for for fstream and istream/ostream.
+//			//then do an << or >> here, which the overload handled in customer class will actually handle
+//			//decode and encode etc without explicitly calling a customer method
+//			
+//			//temp = temp1[i]->key;
+//			temp =temp1->Load_Decode_File1(data);
+//			if (temp == nullptr) {
+//				continue;
+//			}
+//			else {
+//				Insert(temp, root);
+//			}
+//		}
+//	}
+//	data.close();
+//
+//}
 
 template <typename T>
 void BinarySearchTree<T>::Insert(T* inval, Node<T>* parent) {
